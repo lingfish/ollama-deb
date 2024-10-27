@@ -1,0 +1,69 @@
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - '*'
+
+jobs:
+  build-debs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove tag semver v
+        run: |
+          echo "VERSION_NO_V=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - name: Install required packages
+        run: |
+          pwd
+          sudo apt update
+          sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
+          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
+
+      - name: Download latest ollama
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: 'ollama/ollama'
+          tag: ${{ github.ref_name }}
+          fileName: 'ollama-linux-amd64.tgz'
+
+      - name: Download license
+        run: |
+          curl -L --no-progress-meter 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -o LICENSE.ollama
+
+      - name: Create skeleton and extract ollama
+        run: |
+          pwd
+          mkdir -p ollama-${VERSION_NO_V}/tmp
+          cd ollama-${VERSION_NO_V}/
+          tar zxvf ../ollama-linux-amd64.tgz -C tmp
+          ls -lR
+
+      - name: Run dh_make to create packaging files
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          pwd
+          cd ollama-${VERSION_NO_V}/
+          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../../LICENSE.ollama --email ollama@ollama.com --native --yes
+          bash ../mkinstall.sh
+          bash ../enable_sysuser.sh
+          cp -v ../packaging_files/* debian/
+
+      - name: Build the package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          pwd
+          cd ollama-${VERSION_NO_V}/
+          dpkg-buildpackage -b -us -uc
+          cd ..
+          ls -lR
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.deb"
