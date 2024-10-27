@@ -5,21 +5,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: jtdor/build-deb-action@v1
-        env:
+      - env:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
-        with:
-          setup-hook: |
-            pwd
-            apt update
-            apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
-            curl -L 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' -O
-            curl -L --silent 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
-            mkdir -p ollama-0.3.14/tmp
-            cd ollama-0.3.14/
-            tar zxvf ../ollama-linux-amd64.tgz -C tmp
-            ls -lR
-            dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
-
-          buildpackage-opts: --build=binary --no-sign
+      - name: Do it
+        run: |
+          pwd
+          apt update
+          apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
+          curl -L 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' -O
+          curl -L --silent 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
+          mkdir -p ollama-0.3.14/tmp
+          cd ollama-0.3.14/
+          tar zxvf ../ollama-linux-amd64.tgz -C tmp
+          ls -lR
+          dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
+          dpkg-buildpackage -b -us -uc
