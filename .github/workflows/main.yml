@@ -14,6 +14,8 @@ jobs:
             cd ollama-0.3.14/
             curl -L --silent 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' | tar zxvf - -C tmp
             curl -L --silent 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -o LICENSE
+            tree
+            ls -lR
             dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile LICENSE --email ollama@ollama.com --native --yes
 
           buildpackage-opts: --build=binary --no-sign
