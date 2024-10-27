@@ -37,6 +37,10 @@ jobs:
           bash ../mkinstall.sh
 
       - name: Build the package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
           dpkg-buildpackage -b -us -uc
 
       - name: Release
