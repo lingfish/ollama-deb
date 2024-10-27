@@ -20,4 +20,28 @@ jobs:
           tar zxvf ../ollama-linux-amd64.tgz -C tmp
           ls -lR
           dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
+          rm -f debian/install
+          
+          # Iterate over all files in the tmp directory
+          for file in tmp/bin/*; do
+            # Skip directories (only process files)
+            if [ -f "$file" ]; then
+              f=$(basename -- "$file")
+              echo "tmp/bin/$f usr/bin/" >> debian/install
+            fi
+          done
+          
+          for file in tmp/lib/ollama/*; do
+            # Skip directories (only process files)
+            if [ -f "$file" ]; then
+              f=$(basename -- "$file")
+              echo "tmp/lib/ollama/$f usr/lib/" >> debian/install
+            fi
+          done
           dpkg-buildpackage -b -us -uc
+      - name: Archive the package
+        uses: actions/upload-artifact@v4
+        with:
+          name: debfile
+          path: |
+            *.deb
