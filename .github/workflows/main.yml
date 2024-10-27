@@ -24,7 +24,7 @@ jobs:
           tar zxvf ../ollama-linux-amd64.tgz -C tmp
           ls -lR
           dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
-          ../mkinstall.sh
+          bash ../mkinstall.sh
           dpkg-buildpackage -b -us -uc
       - name: Release
         uses: softprops/action-gh-release@v2
