@@ -10,9 +10,6 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
           setup-hook: |
-            echo 'Not sure why this isnt working'
-            
-          before-build-hook: |
             pwd
             mkdir -p ollama-0.3.14/tmp
             cd ollama-0.3.14/
