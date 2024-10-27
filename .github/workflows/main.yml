@@ -20,6 +20,6 @@ jobs:
             cd ollama-0.3.14/
             tar zxvf ../ollama-linux-amd64.tgz -C tmp
             ls -lR
-            dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
+            dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
 
           buildpackage-opts: --build=binary --no-sign
