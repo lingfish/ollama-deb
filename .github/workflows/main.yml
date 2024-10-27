@@ -10,6 +10,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
           before-build-hook: |
+            pwd
             mkdir -p ollama-0.3.14/tmp
             cd ollama-0.3.14/
             curl -L --silent 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' | tar zxvf - -C tmp
