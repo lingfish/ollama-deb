@@ -11,8 +11,8 @@ jobs:
           DEBFULLNAME: ollama
         run: |
           pwd
-          apt update
-          apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
+          sudo apt update
+          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
           curl -L 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' -O
           curl -L --silent 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
           mkdir -p ollama-0.3.14/tmp
