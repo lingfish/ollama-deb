@@ -10,22 +10,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Do it
-        env:
-          DEB_BUILD_OPTIONS: noautodbgsym
-          DEBFULLNAME: ollama
+
+      - name: Install required packages
         run: |
           pwd
           sudo apt update
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
+
+      - name: Download ollama
+        run: |
           curl -L 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' -O
-          curl -L --silent 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
+          curl -L 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
+
+      - name: Create skeleton and extract ollama
+        run: |
           mkdir -p ollama-0.3.14/tmp
           cd ollama-0.3.14/
           tar zxvf ../ollama-linux-amd64.tgz -C tmp
           ls -lR
+
+      - name: Run dh_make to create packaging files
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
           dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
           bash ../mkinstall.sh
+
+      - name: Build the package
           dpkg-buildpackage -b -us -uc
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
