@@ -39,9 +39,8 @@ jobs:
             fi
           done
           dpkg-buildpackage -b -us -uc
-      - name: Archive the package
-        uses: actions/upload-artifact@v4
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        #if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: debfile
-          path: |
-            *.deb
+          files: *.deb
