@@ -8,7 +8,7 @@ jobs:
       - uses: jtdor/build-deb-action@v1
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
-        with
+        with:
           before-build-hook: |
             mkdir -p ollama-0.3.14/tmp
             cd ollama-0.3.14/
