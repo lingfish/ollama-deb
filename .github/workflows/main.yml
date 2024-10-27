@@ -8,6 +8,7 @@ jobs:
       - uses: jtdor/build-deb-action@v1
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
         with:
           setup-hook: |
             pwd
