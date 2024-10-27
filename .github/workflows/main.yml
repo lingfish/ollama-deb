@@ -41,6 +41,5 @@ jobs:
           dpkg-buildpackage -b -us -uc
       - name: Release
         uses: softprops/action-gh-release@v2
-        #if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: *.deb
+          files: "*.deb"
