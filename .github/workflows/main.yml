@@ -5,10 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - env:
+      - name: Do it
+        env:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
-      - name: Do it
         run: |
           pwd
           apt update
