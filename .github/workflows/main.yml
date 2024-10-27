@@ -18,11 +18,13 @@ jobs:
 
       - name: Download ollama
         run: |
+          pwd
           curl -L 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' -O
           curl -L 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
 
       - name: Create skeleton and extract ollama
         run: |
+          pwd
           mkdir -p ollama-0.3.14/tmp
           cd ollama-0.3.14/
           tar zxvf ../ollama-linux-amd64.tgz -C tmp
@@ -33,6 +35,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
         run: |
+          pwd
           dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
           bash ../mkinstall.sh
 
@@ -41,6 +44,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
         run: |
+          pwd
           dpkg-buildpackage -b -us -uc
 
       - name: Release
