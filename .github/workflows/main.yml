@@ -30,7 +30,7 @@ jobs:
 
       - name: Download license
         run: |
-          curl -L --no-progress-meter 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
+          curl -L --no-progress-meter 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -o LICENSE.ollama
 
       - name: Create skeleton and extract ollama
         run: |
@@ -47,8 +47,10 @@ jobs:
         run: |
           pwd
           cd ollama-${VERSION_NO_V}/
-          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
+          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../../LICENSE.ollama --email ollama@ollama.com --native --yes
           bash ../mkinstall.sh
+          bash ../enable_sysuser.sh
+          cp -v ../packaging_files/* debian/
 
       - name: Build the package
         env:
