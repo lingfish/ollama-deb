@@ -17,9 +17,10 @@ do_libs () {
     # Skip directories (only process files)
     if [ -f "$file" ]; then
       f=$(basename -- "$file")
-      echo "tmp/lib/ollama/$f usr/lib/" >> debian/install
+      echo "tmp/lib/ollama/$f usr/lib/ollama/" >> debian/install
     fi
   done
 }
 
 do_bin
+do_libs

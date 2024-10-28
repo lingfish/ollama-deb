@@ -1,0 +1,23 @@
+Source: ollama
+Section: golang
+Priority: optional
+Maintainer: ollama <ollama@ollama.com>
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 13),
+Standards-Version: 4.7.0
+Homepage: https://github.com/ollama/ollama
+Vcs-Browser: https://github.com/ollama/ollama
+
+Package: ollama
+Section: golang
+Architecture: amd64
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
