@@ -13,21 +13,26 @@ jobs:
       - name: Install required packages
         run: |
           pwd
+          echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io
           sudo apt update
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
 
-      - name: Download ollama
+      - name: Download latest ollama
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: 'ollama/ollama'
+          tag: ${{ github.ref_name }}
+          fileName: 'ollama-linux-amd64.tgz'
+
+      - name: Download license
         run: |
-          pwd
-          curl -L --no-progress-meter 'https://github.com/ollama/ollama/releases/download/v0.3.14/ollama-linux-amd64.tgz' -O
           curl -L --no-progress-meter 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -O
-          ls -lR
 
       - name: Create skeleton and extract ollama
         run: |
           pwd
-          mkdir -p ollama-0.3.14/tmp
-          cd ollama-0.3.14/
+          mkdir -p ollama-${{ github.ref_name }}/tmp
+          cd ollama-${{ github.ref_name }}/
           tar zxvf ../ollama-linux-amd64.tgz -C tmp
           ls -lR
 
@@ -37,8 +42,8 @@ jobs:
           DEBFULLNAME: ollama
         run: |
           pwd
-          cd ollama-0.3.14/
-          dh_make --single --packagename ollama_0.3.14 --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
+          cd ollama-${{ github.ref_name }}/
+          dh_make --single --packagename ollama_${{ github.ref_name }} --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
           bash ../mkinstall.sh
 
       - name: Build the package
@@ -47,7 +52,7 @@ jobs:
           DEBFULLNAME: ollama
         run: |
           pwd
-          cd ollama-0.3.14/
+          cd ollama-${{ github.ref_name }}/
           dpkg-buildpackage -b -us -uc
           cd ..
           ls -lR
