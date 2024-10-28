@@ -10,6 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Remove tag semver v
+        run: |
+          echo "VERSION_NO_V=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
       - name: Install required packages
         run: |
           pwd
@@ -31,8 +35,8 @@ jobs:
       - name: Create skeleton and extract ollama
         run: |
           pwd
-          mkdir -p ollama-${{ github.ref_name }}/tmp
-          cd ollama-${{ github.ref_name }}/
+          mkdir -p ollama-${VERSION_NO_V}/tmp
+          cd ollama-${VERSION_NO_V}/
           tar zxvf ../ollama-linux-amd64.tgz -C tmp
           ls -lR
 
@@ -42,8 +46,8 @@ jobs:
           DEBFULLNAME: ollama
         run: |
           pwd
-          cd ollama-${{ github.ref_name }}/
-          dh_make --single --packagename ollama_${{ github.ref_name }} --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
+          cd ollama-${VERSION_NO_V}/
+          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../../LICENSE --email ollama@ollama.com --native --yes
           bash ../mkinstall.sh
 
       - name: Build the package
@@ -52,7 +56,7 @@ jobs:
           DEBFULLNAME: ollama
         run: |
           pwd
-          cd ollama-${{ github.ref_name }}/
+          cd ollama-${VERSION_NO_V}/
           dpkg-buildpackage -b -us -uc
           cd ..
           ls -lR
