@@ -18,8 +18,9 @@ jobs:
         run: |
           pwd
           sudo apt update
-          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
+          sudo apt install -y --no-install-recommends dpkg
           sudo echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io
+          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
 
       - name: Download latest ollama
         uses: robinraju/release-downloader@v1
