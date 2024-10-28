@@ -17,7 +17,7 @@ jobs:
       - name: Install required packages
         run: |
           pwd
-          echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io
+          sudo echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io
           sudo apt update
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates
 
