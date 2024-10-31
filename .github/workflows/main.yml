@@ -22,20 +22,12 @@ jobs:
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
 
       - name: Download latest ollama
-        uses: robinraju/release-downloader@v1
-        with:
-          repository: 'ollama/ollama'
-          tag: ${{ github.ref_name }}
-          fileName: 'ollama-linux-amd64.tgz'
+        run: |
+          gh release download --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tgz
 
       - name: Download ollama source
         run: |
           gh release download --repo https://github.com/ollama/ollama --archive tar.gz
-
-      - name: Extract ollama docs and license
-        run: |
-          mkdir ollama_partial
-          tar zxvf ollama-${VERSION_NO_V}.tar.gz -C ollama_partial ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
       - name: Create skeleton and extract ollama
         run: |
@@ -43,7 +35,11 @@ jobs:
           mkdir -p ollama-${VERSION_NO_V}/tmp
           cd ollama-${VERSION_NO_V}/
           tar zxvf ../ollama-linux-amd64.tgz -C tmp
-          ls -lR
+
+      - name: Extract ollama docs and license
+        run: |
+          cd ollama-${VERSION_NO_V}/
+          tar --strip-components 1 -zxvf ../ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
       - name: Run dh_make to create packaging files
         env:
@@ -52,10 +48,9 @@ jobs:
         run: |
           pwd
           cd ollama-${VERSION_NO_V}/
-          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../../ollama_partial/LICENSE --email ollama@ollama.com --native --yes --overlay ../ollama-deb/packaging_files/
+          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
           bash ../mkinstall.sh
-          #bash ../enable_sysuser.sh
-          #cp -v ../packaging_files/* debian/
+          cp -v ../ollama-deb/packaging_files/* debian/
 
       - name: Build the package
         env:
