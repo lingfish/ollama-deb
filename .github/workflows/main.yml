@@ -28,9 +28,14 @@ jobs:
           tag: ${{ github.ref_name }}
           fileName: 'ollama-linux-amd64.tgz'
 
-      - name: Download license
+      - name: Download ollama source
         run: |
-          curl -L --no-progress-meter 'https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/LICENSE' -o LICENSE.ollama
+          gh release download --repo https://github.com/ollama/ollama --archive tar.gz
+
+      - name: Extract ollama docs and license
+        run: |
+          mkdir ollama_partial
+          tar zxvf ollama-${VERSION_NO_V}.tar.gz -C ollama_partial ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
       - name: Create skeleton and extract ollama
         run: |
@@ -47,10 +52,10 @@ jobs:
         run: |
           pwd
           cd ollama-${VERSION_NO_V}/
-          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../../LICENSE.ollama --email ollama@ollama.com --native --yes
+          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../../ollama_partial/LICENSE --email ollama@ollama.com --native --yes --overlay ../ollama-deb/packaging_files/
           bash ../mkinstall.sh
-          bash ../enable_sysuser.sh
-          cp -v ../packaging_files/* debian/
+          #bash ../enable_sysuser.sh
+          #cp -v ../packaging_files/* debian/
 
       - name: Build the package
         env:
