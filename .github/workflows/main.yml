@@ -25,13 +25,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tgz
+          gh release download ${GITHUB_REF_NAME} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tgz
 
       - name: Download ollama source
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download --repo https://github.com/ollama/ollama --archive tar.gz
+          gh release download ${GITHUB_REF_NAME} --repo https://github.com/ollama/ollama --archive tar.gz
 
       - name: Create skeleton and extract ollama
         run: |
