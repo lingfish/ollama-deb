@@ -20,5 +20,6 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
           dh-make-golang github.com/ollama/ollama
+          cd ollama
           git add debian && git commit -a -m 'Initial packaging'
           gbp buildpackage --git-pbuilder
