@@ -15,11 +15,16 @@ jobs:
           which -a go
           go version
 
-      - name: Run it
+      - name: Create the moo cow
+        run: sudo cowbuilder --create
+
+      - name: Run dh-make-golang
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
           dh-make-golang github.com/ollama/ollama
+
+      - name: Build the package
           cd ollama
           git add debian && git commit -a -m 'Initial packaging'
           gbp buildpackage --git-pbuilder
