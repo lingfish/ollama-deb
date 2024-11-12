@@ -25,6 +25,7 @@ jobs:
           dh-make-golang github.com/ollama/ollama
 
       - name: Build the package
+        run: |
           cd ollama
           git add debian && git commit -a -m 'Initial packaging'
           gbp buildpackage --git-pbuilder
