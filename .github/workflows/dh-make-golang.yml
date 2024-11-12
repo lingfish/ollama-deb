@@ -12,6 +12,8 @@ jobs:
           sudo apt update
           sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
           sudo apt install -y --no-install-recommends dh-make-golang curl build-essential ca-certificates
+          which -a go
+          go version
 
       - name: Run it
         run: |
