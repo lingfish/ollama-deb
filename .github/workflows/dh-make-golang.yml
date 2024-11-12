@@ -16,7 +16,7 @@ jobs:
           go version
 
       - name: Create the moo cow
-        run: DIST=unstable sudo cowbuilder --create --distribution unstable
+        run: DIST=unstable sudo cowbuilder --create --distribution unstable --mirror https://deb.debian.org/debian
 
       - name: Run dh-make-golang
         run: |
