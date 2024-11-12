@@ -27,3 +27,6 @@ export DH_VERBOSE = 1
 
 # Don't run strip
 override_dh_strip:
+
+override_dh_shlibdeps:
+	dh_shlibdeps -Xlib/ollama
