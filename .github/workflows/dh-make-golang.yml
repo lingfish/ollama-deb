@@ -11,12 +11,12 @@ jobs:
           pwd
           sudo apt update
           sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
-          sudo apt install -y --no-install-recommends dh-make-golang curl build-essential ca-certificates cowbuilder
+          sudo apt install -y --no-install-recommends dh-make-golang curl build-essential ca-certificates cowbuilder ubuntu-archive-keyring
           which -a go
           go version
 
       - name: Create the moo cow
-        run: sudo cowbuilder --create --distribution unstable --keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg
+        run: DIST=gutsy sudo cowbuilder --create --distribution gutsy --components "main universe" --basepath /var/cache/pbuilder/gutsy-amd64.cow --debootstrapopts --keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg
 
       - name: Run dh-make-golang
         run: |
