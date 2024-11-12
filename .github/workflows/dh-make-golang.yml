@@ -16,7 +16,7 @@ jobs:
           go version
 
       - name: Create the moo cow
-        run: sudo cowbuilder --create
+        run: sudo cowbuilder --create --distribution unstable
 
       - name: Run dh-make-golang
         run: |
