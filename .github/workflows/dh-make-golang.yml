@@ -16,7 +16,7 @@ jobs:
           go version
 
       - name: Create the moo cow
-        run: sudo cowbuilder --create --distribution unstable
+        run: sudo cowbuilder --create --distribution unstable --keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg
 
       - name: Run dh-make-golang
         run: |
