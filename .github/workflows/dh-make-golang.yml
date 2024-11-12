@@ -1,0 +1,21 @@
+on:
+  manual
+
+jobs:
+  build-debs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install required packages
+        run: |
+          pwd
+          sudo apt update
+          sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
+          sudo apt install -y --no-install-recommends dh-make-golang curl build-essential ca-certificates
+
+      - name: Run it
+        run: |
+          dh-make-golang github.com/ollama/ollama
+          git add debian && git commit -a -m 'Initial packaging'
+          gbp buildpackage --git-pbuilder
