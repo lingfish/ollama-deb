@@ -54,7 +54,7 @@ jobs:
           ls -l
           cd ollama-${VERSION_NO_V}/
           dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
-          bash ../mkinstall.sh
+          # bash ../mkinstall.sh
           cp -v ../packaging_files/* debian/
 
       - name: Build the package
