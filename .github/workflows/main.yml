@@ -68,7 +68,11 @@ jobs:
           cd ..
           ls -lR
 
+      - name: Grab .deb file contents
+        run: dpkg -c *.deb > CONTENTS.txt
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: "*.deb"
+          body_path: CONTENTS.txt
