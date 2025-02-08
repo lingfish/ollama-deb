@@ -74,9 +74,9 @@ jobs:
           echo "" >> CONTENTS.md
           echo "deb file contents:" >> CONTENTS.md
           echo "" >> CONTENTS.md
-          echo "```" >> CONTENTS.md
+          echo '```' >> CONTENTS.md
           dpkg -c *.deb >> CONTENTS.md
-          echo "```" >> CONTENTS.md
+          echo '```' >> CONTENTS.md
 
       - name: Release
         uses: softprops/action-gh-release@v2
