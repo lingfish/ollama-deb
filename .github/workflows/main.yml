@@ -69,10 +69,17 @@ jobs:
           ls -lR
 
       - name: Grab .deb file contents
-        run: dpkg -c *.deb > CONTENTS.txt
+        run: |
+          echo "This is release ${GITHUB_REF_NAME}." > CONTENTS.md
+          echo "" >> CONTENTS.md
+          echo "deb file contents:" >> CONTENTS.md
+          echo "" >> CONTENTS.md
+          echo "```" >> CONTENTS.md
+          dpkg -c *.deb >> CONTENTS.md
+          echo "```" >> CONTENTS.md
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: "*.deb"
-          body_path: CONTENTS.txt
+          body_path: CONTENTS.md
