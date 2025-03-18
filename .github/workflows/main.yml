@@ -5,6 +5,7 @@ on:
     # Pattern matched against refs/tags
     tags:        
       - '*'
+  workflow_dispatch:
 
 jobs:
   build-debs:
