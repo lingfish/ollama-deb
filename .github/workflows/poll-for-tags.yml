@@ -9,6 +9,8 @@ jobs:
   check-tags:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      
       - name: Check for new tags
         id: check_tags
         env:
