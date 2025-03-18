@@ -38,3 +38,16 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git tag $new_tag
           git push origin $new_tag
+
+
+      - name: Trigger main.yml workflow
+        if: steps.check_tags.outputs.their_latest_tag != steps.check_tags.outputs.our_latest_tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/main.yml/dispatches \
+            -d '{"ref":"main"}'
+            
