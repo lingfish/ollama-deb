@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check for new tags
         id: check_tags
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           # Get the latest tag
           their_latest_tag=$(gh release list --repo https://github.com/ollama/ollama --json tagName --jq '.[] | .tagName' --limit 1)
