@@ -1,0 +1,25 @@
+name: Poll for New Tags
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # This runs the action every hour (adjust as needed)
+
+jobs:
+  check-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for new tags
+        id: check_tags
+        run: |
+          # Fetch the latest tags from the other repository
+          git fetch --tags <https://github.com/OTHER_USER/OTHER_REPO.git>
+          # Get the latest tag
+          latest_tag=$(git tag --sort=-creatordate | head -n 1)
+          echo "Latest tag: $latest_tag"
+          echo "::set-output name=latest_tag::$latest_tag"
+
+      - name: Trigger action if new tag found
+        if: steps.check_tags.outputs.latest_tag != 'YOUR_LAST_KNOWN_TAG'
+        run: |
+          echo "New tag detected: ${{ steps.check_tags.outputs.latest_tag }}"
+          # Add your action logic here
