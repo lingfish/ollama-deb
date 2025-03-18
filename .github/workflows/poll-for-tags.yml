@@ -1,4 +1,4 @@
-name: Poll for New Tags
+name: Poll for new tags
 
 on:
   schedule:
@@ -12,18 +12,27 @@ jobs:
       - name: Check for new tags
         id: check_tags
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get the latest tag
+          # Get the latest tag from ollama/ollama
           their_latest_tag=$(gh release list --repo https://github.com/ollama/ollama --json tagName --jq '.[] | .tagName' --limit 1)
           echo "Their latest tag: $their_latest_tag"
-          #echo "::set-output name=latest_tag::$latest_tag"
+          echo "::set-output name=their_latest_tag::${their_latest_tag}"
+          
+          # Get the latest tag from this repository
           our_latest_tag=$(gh release list --repo ${{ github.repositoryUrl }} --json tagName --jq '.[] | .tagName' --limit 1)
           echo "Our latest tag: $our_latest_tag"
+          echo "::set-output name=our_latest_tag::${our_latest_tag}"
 
-
-      - name: Trigger action if new tag found
-        if: steps.check_tags.outputs.latest_tag != 'YOUR_LAST_KNOWN_TAG'
+      - name: Create new tag if new tag found
+        if: steps.check_tags.outputs.their_latest_tag != steps.check_tags.outputs.our_latest_tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "New tag detected: ${{ steps.check_tags.outputs.latest_tag }}"
-          # Add your action logic here
+          new_tag=${{ steps.check_tags.outputs.their_latest_tag }}
+          echo "Creating new tag: $new_tag"
+          # Create a new tag in this repository
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git tag $new_tag
+          git push origin $new_tag
