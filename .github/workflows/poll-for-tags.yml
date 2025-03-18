@@ -11,12 +11,13 @@ jobs:
       - name: Check for new tags
         id: check_tags
         run: |
-          # Fetch the latest tags from the other repository
-          git fetch --tags <https://github.com/OTHER_USER/OTHER_REPO.git>
           # Get the latest tag
-          latest_tag=$(git tag --sort=-creatordate | head -n 1)
-          echo "Latest tag: $latest_tag"
-          echo "::set-output name=latest_tag::$latest_tag"
+          their_latest_tag=$(gh release list --repo https://github.com/ollama/ollama --json tagName --jq '.[] | .tagName' --limit 1)
+          echo "Their latest tag: $their_latest_tag"
+          #echo "::set-output name=latest_tag::$latest_tag"
+          our_latest_tag=$(gh release list --repo ${github.repositoryUrl} --json tagName --jq '.[] | .tagName' --limit 1)
+          echo "Our latest tag: $our_latest_tag"
+
 
       - name: Trigger action if new tag found
         if: steps.check_tags.outputs.latest_tag != 'YOUR_LAST_KNOWN_TAG'
