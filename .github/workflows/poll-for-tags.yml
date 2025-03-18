@@ -3,6 +3,7 @@ name: Poll for New Tags
 on:
   schedule:
     - cron: '0 * * * *'  # This runs the action every hour (adjust as needed)
+  workflow_dispatch:
 
 jobs:
   check-tags:
