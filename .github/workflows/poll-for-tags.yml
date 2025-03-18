@@ -18,7 +18,7 @@ jobs:
           their_latest_tag=$(gh release list --repo https://github.com/ollama/ollama --json tagName --jq '.[] | .tagName' --limit 1)
           echo "Their latest tag: $their_latest_tag"
           #echo "::set-output name=latest_tag::$latest_tag"
-          our_latest_tag=$(gh release list --repo ${github.repositoryUrl} --json tagName --jq '.[] | .tagName' --limit 1)
+          our_latest_tag=$(gh release list --repo ${{ github.repositoryUrl }} --json tagName --jq '.[] | .tagName' --limit 1)
           echo "Our latest tag: $our_latest_tag"
 
 
