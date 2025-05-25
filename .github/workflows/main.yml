@@ -71,18 +71,9 @@ jobs:
           cd ..
           ls -lR
 
-      - name: Grab .deb file contents
+      - name: Generate CONTENTS.md
         run: |
-          echo "# Package information" > CONTENTS.md
-          echo "This is release ${GITHUB_REF_NAME}." >> CONTENTS.md
-          echo "## deb info" >> CONTENTS.md
-          for f in *.deb; do echo "### $f" >> CONTENTS.md; echo '```' >> CONTENTS.md; dpkg -I $f >> CONTENTS.md; echo '```' >> CONTENTS.md; done
-          echo "## deb file contents:" >> CONTENTS.md
-          for f in *.deb; do echo "### $f" >> CONTENTS.md; echo '```' >> CONTENTS.md; dpkg -c $f >> CONTENTS.md; echo '```' >> CONTENTS.md; done
-          echo "" >> CONTENTS.md
-          echo '```' >> CONTENTS.md
-          dpkg -c *.deb >> CONTENTS.md
-          echo '```' >> CONTENTS.md
+          ./generate_contents_md.sh
 
       - name: Release
         uses: softprops/action-gh-release@v2
