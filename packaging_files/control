@@ -21,3 +21,12 @@ Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other larg
  Discord (https://discord.gg/ollama)
  .
  Get up and running with large language models.
+
+Package: libollama1
+Section: libs
+Architecture: amd64
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama.
