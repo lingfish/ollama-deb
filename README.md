@@ -45,8 +45,7 @@ Setting up ollama (0.3.14) ...
 Created symlink /etc/systemd/system/default.target.wants/ollama.service → /lib/systemd/system/ollama.service.
 Processing triggers for libc-bin (2.36-9+deb12u7) ...
 ```
-With respect to the shared libraries packaged by the ollama team, I don't know why they do this.  I've packaged them
-here anyway, and updating your `ld.so.conf` etc is left as an exercise for the reader.  Realistically, there should be
-a separate package for the libs.
+
+The shared libraries that the ollama team put into their binary tarballs are now split into their own package.
 
 Head over to the [releases page](https://github.com/lingfish/ollama-deb/releases) to download.
