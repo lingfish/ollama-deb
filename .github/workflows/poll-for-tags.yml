@@ -2,7 +2,7 @@ name: Poll for new tags
 
 on:
   schedule:
-    - cron: '0 * * * *'  # This runs the action every hour (adjust as needed)
+    - cron: '0 */4 * * *'  # This runs the action every hour (adjust as needed)
   workflow_dispatch:
 
 jobs:
