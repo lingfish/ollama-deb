@@ -35,3 +35,13 @@ Depends:
 Maintainer: lingfish <lingfish@users.noreply.github.com>
 Description: Shared libraries for ollama
  This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: libollama-amd
+Section: libs
+Architecture: amd64
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.

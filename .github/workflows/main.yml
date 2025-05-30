@@ -38,6 +38,10 @@ jobs:
         run: |
           gh release download ${GITHUB_REF_NAME} --repo https://github.com/ollama/ollama --archive tar.gz
 
+      - name: Download ollama rocm tarball
+        run: |
+          wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tgz'
+
       - name: Create skeleton and extract ollama
         run: |
           pwd
@@ -49,6 +53,12 @@ jobs:
         run: |
           cd ollama-${VERSION_NO_V}/
           tar --strip-components 1 -zxvf ../ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
+
+      - name: Extract AMD rocm stuff
+        run: |
+          cd ollama-${VERSION_NO_V}/
+          mkdir tmp/rocm
+          tar zxvf ../ollama-linux-amd64-rocm.tgz -C tmp/rocm
 
       - name: Run dh_make to create packaging files
         env:
