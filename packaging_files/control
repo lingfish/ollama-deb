@@ -1,7 +1,7 @@
 Source: ollama
 Section: golang
 Priority: optional
-Maintainer: ollama <ollama@ollama.com>
+Maintainer: lingfish <lingfish@users.noreply.github.com>
 Rules-Requires-Root: no
 Build-Depends:
  debhelper-compat (= 13),
