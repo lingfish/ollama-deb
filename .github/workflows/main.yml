@@ -74,6 +74,8 @@ jobs:
           ls -lR
 
       - name: Generate CONTENTS.md
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           ./generate_contents_md.sh
 
