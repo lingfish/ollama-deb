@@ -34,3 +34,7 @@ for f in *.deb; do
     echo '```'
   } >> "$OUTPUT"
 done
+
+# upstream release notes
+echo "# Upstream release notes" >> "$OUTPUT"
+gh release view ${RELEASE_NAME} --repo https://github.com/ollama/ollama --json body --jq .body >> "$OUTPUT"

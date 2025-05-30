@@ -3,7 +3,7 @@ name: Build new release
 on:
   push:
     # Pattern matched against refs/tags
-    tags:        
+    tags:
       - '*'
   workflow_dispatch:
 
@@ -13,9 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Remove tag semver v
+      - name: Remove tag semver v and apply Debian rc tilde if required
         run: |
-          echo "VERSION_NO_V=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+          version_no_v="${GITHUB_REF_NAME#v}"
+          version_deb="${version_no_v/-rc/~rc}"
+          echo "VERSION_NO_V=$version_deb" >> $GITHUB_ENV
 
       - name: Install required packages
         run: |
