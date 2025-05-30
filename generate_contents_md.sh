@@ -24,16 +24,17 @@ for f in *.deb; do
   } >> "$OUTPUT"
 done
 
+# This is disabled due to the GitHub API rejecting large payloads
 # Per-package file listing
-echo "## deb file contents:" >> "$OUTPUT"
-for f in *.deb; do
-  {
-    echo "### $f"
-    echo '```'
-    dpkg -c "$f"
-    echo '```'
-  } >> "$OUTPUT"
-done
+#echo "## deb file contents:" >> "$OUTPUT"
+#for f in *.deb; do
+#  {
+#    echo "### $f"
+#    echo '```'
+#    dpkg -c "$f"
+#    echo '```'
+#  } >> "$OUTPUT"
+#done
 
 # upstream release notes
 echo "# Upstream release notes" >> "$OUTPUT"
