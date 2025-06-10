@@ -1,19 +1,19 @@
-name: Build new release v2
+name: Build new release
 
 on:
   push:
+    # Pattern matched against refs/tags
     tags:
       - '*'
   workflow_dispatch:
 
 jobs:
-  prepare:
+  build-debs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Remove tag semver v and apply Debian rc tilde if required
-        id: version
         run: |
           version_no_v="${GITHUB_REF_NAME#v}"
           version_deb="${version_no_v/-rc/~rc}"
@@ -22,6 +22,7 @@ jobs:
 
       - name: Install required packages
         run: |
+          pwd
           sudo apt update
           sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
@@ -42,60 +43,34 @@ jobs:
         run: |
           wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tgz'
 
-      - name: Upload ollama artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ollama-artifacts
-          path: |
-            ollama-linux-amd64.tgz
-            ollama-${{ env.VERSION_NO_V }}.tar.gz
-            ollama-linux-amd64-rocm.tgz
-
-  build:
-    runs-on: ubuntu-latest
-    needs: prepare
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set environment variable for version
-        run: |
-          version_no_v="${GITHUB_REF_NAME#v}"
-          version_deb="${version_no_v/-rc/~rc}"
-          echo "VERSION_NO_V=$version_no_v" >> $GITHUB_ENV
-          echo "VERSION_NO_V_DEB=$version_deb" >> $GITHUB_ENV
-
-      - name: Install required packages
-        run: |
-          sudo apt update
-          sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
-          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
-
-      - name: Download ollama artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: ollama-artifacts
-
       - name: Create skeleton and extract ollama
         run: |
+          pwd
           mkdir -p ollama-${VERSION_NO_V}/tmp
-          tar zxvf ollama-linux-amd64.tgz -C ollama-${VERSION_NO_V}/tmp
+          cd ollama-${VERSION_NO_V}/
+          tar zxvf ../ollama-linux-amd64.tgz -C tmp
 
       - name: Extract ollama docs and license
         run: |
-          tar --strip-components 1 -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE -C ollama-${VERSION_NO_V}/
+          cd ollama-${VERSION_NO_V}/
+          tar --strip-components 1 -zxvf ../ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
       - name: Extract AMD rocm stuff
         run: |
-          mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
-          tar zxvf ollama-linux-amd64-rocm.tgz -C ollama-${VERSION_NO_V}/tmp/rocm
+          cd ollama-${VERSION_NO_V}/
+          mkdir tmp/rocm
+          tar zxvf ../ollama-linux-amd64-rocm.tgz -C tmp/rocm
 
       - name: Run dh_make to create packaging files
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
         run: |
+          pwd
+          ls -l
           cd ollama-${VERSION_NO_V}/
           dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
+          # bash ../mkinstall.sh
           cp -v ../packaging_files/* debian/
 
       - name: Build the package
@@ -103,55 +78,17 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
         run: |
+          pwd
           cd ollama-${VERSION_NO_V}/
           dpkg-buildpackage -b -us -uc
           cd ..
           ls -lR
-
-      - name: Upload deb artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: deb-package
-          path: "*.deb"
-
-  release-notes:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download deb artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: deb-package
 
       - name: Generate CONTENTS.md
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           ./generate_contents_md.sh
-
-      - name: Upload release-notes
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-notes-md
-          path: CONTENTS.md
-
-  release:
-    runs-on: ubuntu-latest
-    needs: [build, release-notes]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download deb artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: deb-package
-
-      - name: Download release-notes
-        uses: actions/download-artifact@v4
-        with:
-          name: release-notes-md
 
       - name: Release
         uses: softprops/action-gh-release@v2
