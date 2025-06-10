@@ -94,6 +94,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
         run: |
+          tree
           cd ollama-${VERSION_NO_V}/
           dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
           cp -v ../packaging_files/* debian/
