@@ -82,7 +82,7 @@ jobs:
 
       - name: Extract ollama docs and license
         run: |
-          tar --strip-components 1 -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE -C ollama-${VERSION_NO_V}/
+          tar -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
       - name: Extract AMD rocm stuff
         run: |
