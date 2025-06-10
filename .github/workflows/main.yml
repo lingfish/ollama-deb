@@ -17,7 +17,8 @@ jobs:
         run: |
           version_no_v="${GITHUB_REF_NAME#v}"
           version_deb="${version_no_v/-rc/~rc}"
-          echo "VERSION_NO_V=$version_deb" >> $GITHUB_ENV
+          echo "VERSION_NO_V=$version_no_v" >> $GITHUB_ENV
+          echo "VERSION_NO_V_DEB=$version_deb" >> $GITHUB_ENV
 
       - name: Install required packages
         run: |
@@ -68,7 +69,7 @@ jobs:
           pwd
           ls -l
           cd ollama-${VERSION_NO_V}/
-          dh_make --single --packagename ollama_${VERSION_NO_V} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
+          dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
           # bash ../mkinstall.sh
           cp -v ../packaging_files/* debian/
 
