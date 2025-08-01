@@ -1,0 +1,8 @@
+Document: ollama
+Title: ollama documentation
+Author: ollama team
+Abstract: This is the ollama team created documentation.
+Section: Text
+
+Format: Text
+Files: /usr/share/doc/ollama/docs/*
