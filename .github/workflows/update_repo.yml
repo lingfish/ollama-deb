@@ -35,13 +35,18 @@ jobs:
           
       - name: Run reprepro
         run: |
+          cd debian-repo
+          current=`pwd`
+          reprepro=$current/reprepro
           cd debian-repo/apt
-          reprepro --dbdir ../reprepro/db --confdir ../reprepro/conf -C main includedeb bookworm ../deb/bookworm/*deb
+          reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb bookworm $current/deb/bookworm/*deb
           cd dists/bookworm
           cat Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > Release.gpg
 
       - name: Checkin new stuff
         run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git add debian-repo
           git commit -m "Update ollama to ${GITHUB_REF_NAME}"
           git push
