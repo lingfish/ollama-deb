@@ -10,6 +10,14 @@ The contents of the `.deb` file can be seen on the [releases page](https://githu
 It will also install, enable and start a systemd service, as well as add a system user to run ollama.  It also adds the
 source documentation.
 
+## Usage
+### NEW! Use my APT repo!
+
+[Click here](https://lingfish.github.io/ollama-deb/) to get instructions on repo usage.
+
+### Manual deb file install
+Head over to the [releases page](https://github.com/lingfish/ollama-deb/releases) to download.
+
 The package depends on `sysuser-helper`, so either install that first, or install these release packages, and then run
 `apt-get -f install`.
 
@@ -47,5 +55,3 @@ Processing triggers for libc-bin (2.36-9+deb12u7) ...
 ```
 
 The shared libraries that the ollama team put into their binary tarballs are now split into their own package.
-
-Head over to the [releases page](https://github.com/lingfish/ollama-deb/releases) to download.
