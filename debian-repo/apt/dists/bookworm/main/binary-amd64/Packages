@@ -1,0 +1,58 @@
+Package: libollama-amd
+Source: ollama
+Version: 0.10.1
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 5557036
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.10.1_amd64.deb
+Size: 443181342
+SHA256: 33879d93af94ca75826c5c5f3990cc2af476230611ab8843aaa11ddf6a8b6feb
+SHA1: 59b95c6fd0cbc80dd730bd9643965afb2e62f38c
+MD5sum: 1a97f169b43fcc87d0b5e49987baec88
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.10.1
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2700442
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.10.1_amd64.deb
+Size: 706171562
+SHA256: f0e663c1d719e1c01db87f1afb45bf0f4d3044458c15dc3dda734e554eeca1dc
+SHA1: aee51c787c458377493d50dfb177081b4b2c8cd4
+MD5sum: 1b21591f3c12de000e9dd64ac9f53441
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: ollama
+Version: 0.10.1
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 32251
+Depends: libc6 (>= 2.34), libgcc-s1 (>= 3.0), libstdc++6 (>= 10.2), sysuser-helper (>= 1.3.3)
+Recommends: libollama-nvidia | libollama-amd
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: golang
+Filename: pool/main/o/ollama/ollama_0.10.1_amd64.deb
+Size: 9436320
+SHA256: 03b4afd3b0c44500f2999d3bdbbc05e6cf4135b591ac1a619d7d1dcac3a1369b
+SHA1: 03936b93ba275c14c76aface9ebfbb14c1f78bc9
+MD5sum: b3201e699061202bf65f041bdd0b7d6c
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
+ .
+ One of the recommended packages should/will enable GPU support.
+

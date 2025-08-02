@@ -1,0 +1,17 @@
+Codename: bookworm
+Date: Sat, 02 Aug 2025 04:18:13 UTC
+Architectures: amd64
+Components: main
+Description: APT repository for ollama packages
+MD5Sum:
+ 2f2298bd1d637f8f13ce5bac78937bbd 2018 main/binary-amd64/Packages
+ a7a2b41a5cef83bd2efa74a123d5ac71 870 main/binary-amd64/Packages.gz
+ a0c5909e76526c5da8670497575ce6db 84 main/binary-amd64/Release
+SHA1:
+ 6adaf2d9daa88d84f40e3c14b40c269bfef21f89 2018 main/binary-amd64/Packages
+ 698beed956f791629048fbb3d49db84f0361ad1d 870 main/binary-amd64/Packages.gz
+ c70835aaccd66ba55d10067648823f953aeaae65 84 main/binary-amd64/Release
+SHA256:
+ 86ad481339bb5312cc5549630419a6aebe34326015dc551b885134f17a5d3ba6 2018 main/binary-amd64/Packages
+ a970281325e1a14f9199cccf4951cc5f13d5451fe42eef8a50663eb6d195267d 870 main/binary-amd64/Packages.gz
+ 0bfc70e281898cfee3629f8146ec4e1b46f3d0e53ba4584c3be988993f4f434a 84 main/binary-amd64/Release

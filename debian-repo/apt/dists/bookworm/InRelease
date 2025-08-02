@@ -1,0 +1,36 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Codename: bookworm
+Date: Sat, 02 Aug 2025 04:18:13 UTC
+Architectures: amd64
+Components: main
+Description: APT repository for ollama packages
+MD5Sum:
+ 2f2298bd1d637f8f13ce5bac78937bbd 2018 main/binary-amd64/Packages
+ a7a2b41a5cef83bd2efa74a123d5ac71 870 main/binary-amd64/Packages.gz
+ a0c5909e76526c5da8670497575ce6db 84 main/binary-amd64/Release
+SHA1:
+ 6adaf2d9daa88d84f40e3c14b40c269bfef21f89 2018 main/binary-amd64/Packages
+ 698beed956f791629048fbb3d49db84f0361ad1d 870 main/binary-amd64/Packages.gz
+ c70835aaccd66ba55d10067648823f953aeaae65 84 main/binary-amd64/Release
+SHA256:
+ 86ad481339bb5312cc5549630419a6aebe34326015dc551b885134f17a5d3ba6 2018 main/binary-amd64/Packages
+ a970281325e1a14f9199cccf4951cc5f13d5451fe42eef8a50663eb6d195267d 870 main/binary-amd64/Packages.gz
+ 0bfc70e281898cfee3629f8146ec4e1b46f3d0e53ba4584c3be988993f4f434a 84 main/binary-amd64/Release
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEHJ6AInWZGlcPS9vrkal4IUrpJ1cFAmiNkYYACgkQkal4IUrp
+J1eYYg/5AVzICNygUbyAgZDAbmwU28F6YDwlElfFtQ4O3yHRD2lAo2/3JGmG74/j
+z0+tgE7IOUCHlPmLLI+lE+IDjUo4si0eODoCoqsKVtfRpiLw1/NWt/5EEilNl/G6
+W1uEWlXD5TvGxdrL8utVBhpUCDt+SvsbqnTxJAQg8P8C3kmrFl3+LHmxAZfAl2Lu
+0gMp2vJcTUCpHXk/Mf6c+oQjA3zVpXDEFAGpvz96zxYWzZWyrtbaYDcCfIkvdFXd
+q5hBljjEM30+KLipBiOsb/OopBPmUxZInWA8VVEXXyG3CBjqxp9WdztcP3pERTdO
+dcbeTmgrNh9jEq6owugJkvbRBuCOZyhhOLyYRPpmaTTyfAxGeAsIaVhXCCyk/KpK
+S9ET1GesQMxnQX9dLjIUzbXmlExy8pqpzmqCbrYx3XeCzvBdA3y7mhFUNpeSAPZ0
+DZNm1bKHqRm22Y3Z4D45qgb/zh0YrkYkcjRaBk5Wm1yScIUdUACWy3zmU5UTbUTf
+sNaFYtNgCDcx+50ZFZrHnwnEIvRHlA1QZNmq3FMk3pUhLiLXG1KBngd0BVFZZgPX
+xFdUgt8u+8C6RwuCu4yQNSh8AxxGeRB3r/bDfRHc361Tp3Ii8A4JAUSkkoPKV4td
+v36zkHCKYbOXCfTNd5B++HIRE9PUm0MEy7Q6EmkQdTUyPJ1CPq8=
+=6ELU
+-----END PGP SIGNATURE-----
