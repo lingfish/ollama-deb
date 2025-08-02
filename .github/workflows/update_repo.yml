@@ -1,0 +1,45 @@
+name: Update repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      
+      - name: Install reprepro
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y reprepro
+
+      - name: Create dirs if needed
+        run: |
+          mkdir -p debian-repo/{apt,deb,reprepro/{conf,db}}
+          
+      - name: Download latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd debian-repo/deb/bookworm
+          gh release download --pattern '*.deb'
+          
+      - name: Run reprepro
+        run: |
+          cd debian-repo/apt
+          reprepro --dbdir ../reprepro/db --confdir ../reprepro/conf -C main includedeb bookworm ../deb/bookworm/*deb
+          cd dists/bookworm
+          cat Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > Release.gpg
+
+      - name: Checkin new stuff
+        run: |
+          git add debian-repo
+          git commit -m "Update ollama to ${GITHUB_REF_NAME}"
+          git push
