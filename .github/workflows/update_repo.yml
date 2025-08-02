@@ -40,7 +40,7 @@ jobs:
           reprepro=$current/reprepro
           echo $current
           echo $reprepro
-          cd debian-repo/apt
+          cd apt
           reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb bookworm $current/deb/bookworm/*deb
           cd dists/bookworm
           cat Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > Release.gpg
