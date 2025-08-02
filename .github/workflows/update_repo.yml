@@ -38,6 +38,8 @@ jobs:
           cd debian-repo
           current=`pwd`
           reprepro=$current/reprepro
+          echo $current
+          echo $reprepro
           cd debian-repo/apt
           reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb bookworm $current/deb/bookworm/*deb
           cd dists/bookworm
