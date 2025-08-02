@@ -23,14 +23,13 @@ jobs:
       - name: Create dirs if needed
         run: |
           mkdir -p debian-repo/{apt,deb,reprepro/{conf,db}}
-          tree
+          mkdir -p debian-repo/deb/bookworm
           
       - name: Download latest release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           tree
-          #mkdir -p debian-repo/{apt,deb,reprepro/{conf,db}}
           cd debian-repo/deb/bookworm
           gh release download --pattern '*.deb'
           
