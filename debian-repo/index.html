@@ -92,10 +92,10 @@
             <p>Run the following comands to setup the repo:</p>
 
             <pre><code>## Add GPG key
-sudo curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor
+curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor
 
 ## Add repository
-sudo echo "deb [signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://lingfish.github.io/ollama-deb/apt/ bookworm main" > /etc/apt/sources.list.d/ollama.list
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://lingfish.github.io/ollama-deb/apt/ bookworm main" | sudo tee /etc/apt/sources.list.d/ollama.list
 
 ## Update package lists
 sudo apt update</code></pre>
@@ -107,6 +107,10 @@ sudo apt update</code></pre>
 
             <pre><code>## Install a package
 sudo apt install ollama</code></pre>
+
+            <div class="note">
+                <strong>Note:</strong>The first GPU package that this <pre>ollama</pre> package recommends is <pre>libollama-nvidia</pre>, and so if none are requested, this will be installed by default.  If you don't need any, remove it afterwards, or add <pre>--no-install-recommends</pre> to your <pre>apt</pre> command.
+            </div>
 
             <div class="note">
                 <strong>Note:</strong>This repo currently only supports bookworm.
