@@ -88,6 +88,9 @@
 
     <div class="container">
         <div class="section">
+            <div class="note">
+                <strong>Note:</strong>This repo currently only supports Debian bookworm.
+            </div>
             <h2>Repository setup</h2>
             <p>Run the following comands to setup the repo:</p>
 
@@ -110,10 +113,6 @@ sudo apt install ollama</code></pre>
 
             <div class="note">
                 <strong>Note:</strong>The first GPU package that this <pre>ollama</pre> package recommends is <pre>libollama-nvidia</pre>, and so if none are requested, this will be installed by default.  If you don't need any, remove it afterwards, or add <pre>--no-install-recommends</pre> to your <pre>apt</pre> command.
-            </div>
-
-            <div class="note">
-                <strong>Note:</strong>This repo currently only supports bookworm.
             </div>
         </div>
     </div>
