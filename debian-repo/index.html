@@ -106,7 +106,11 @@ sudo apt update</code></pre>
             <p>Install packages directly from the repository:</p>
 
             <pre><code>## Install a package
-sudo apt install ollama libollama-[amd|nvidia]</code> (choose the package that fits your gpu!)</pre>
+sudo apt install ollama</code></pre>
+
+            <div class="note">
+                <strong>Note:</strong>The first GPU package that this <pre>ollama</pre> package recommends is <pre>libollama-nvidia</pre>, and so if none are requested, this will be installed by default.  If you don't need any, remove it afterwards, or add <pre>--no-install-recommends</pre> to your <pre>apt</pre> command.
+            </div>
 
             <div class="note">
                 <strong>Note:</strong>This repo currently only supports bookworm.
