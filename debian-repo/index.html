@@ -78,6 +78,10 @@
             padding: 1rem;
             margin: 1rem 0;
         }
+
+        ul {
+            padding-inline-start: 40px;
+        }
     </style>
 </head>
 <body>
@@ -89,7 +93,7 @@
     <div class="container">
         <div class="section">
             <div class="note">
-                <strong>Note:</strong>This repo currently only supports Debian bookworm.
+                <strong>Note:</strong> This repo currently only supports Debian bookworm.
             </div>
             <h2>Repository setup</h2>
             <p>Run the following comands to setup the repo:</p>
@@ -108,12 +112,17 @@ sudo apt update</code></pre>
             <h2>Package installation</h2>
             <p>Install packages directly from the repository:</p>
 
-            <pre><code>## Install a package
-sudo apt install ollama</code></pre>
+            <pre><code>sudo apt install ollama</code></pre>
 
             <div class="note">
-                <strong>Note:</strong>The first GPU package that this <pre>ollama</pre> package recommends is <pre>libollama-nvidia</pre>, and so if none are requested, this will be installed by default.  If you don't need any, remove it afterwards, or add <pre>--no-install-recommends</pre> to your <pre>apt</pre> command.
+                <strong>Note:</strong> The first GPU package that this <code>ollama</code> package recommends is <code>libollama-nvidia</code>, and so if none are requested, this will be installed by default.  If you don't need any, remove it afterwards, or add <code>--no-install-recommends</code> to your <code>apt</code> command.
             </div>
+
+            <p>To use a GPU, you'll also need one of the following packages, depending on your GPU make:</p>
+            <ul>
+                <li><code>libollama-nvidia</code> (installed by default)</li>
+                <li><code>libollama-amd</code></li>
+            </ul>
         </div>
     </div>
 </body>
