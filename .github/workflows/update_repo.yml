@@ -35,6 +35,8 @@ jobs:
           tree
           cd debian-repo/deb/bookworm
           gh release download --pattern '*.deb'
+          cd -
+          tree
           
       - name: Run reprepro
         run: |
