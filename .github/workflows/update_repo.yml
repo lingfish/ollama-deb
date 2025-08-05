@@ -2,9 +2,8 @@ name: Update repository
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: [Build new release v2]
-    types: [completed]
+  release:
+    types: [published]
 
 jobs:
   update-repo:
