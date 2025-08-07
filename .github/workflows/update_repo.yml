@@ -2,6 +2,11 @@ name: Update repository
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'GitHub release tag to download (.deb from). Leave blank for latest'
+        required: false
+        default: ''
   release:
     types: [published]
 
@@ -29,11 +34,17 @@ jobs:
           mkdir -p debian-repo/{apt,deb,reprepro/{conf,db}}
           mkdir -p debian-repo/deb/bookworm
 
-      - name: Download latest release
+      - name: Download latest release or specified tag
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.inputs.release_tag }}
         run: |
           cd debian-repo/deb/bookworm
+          if [ -n "$RELEASE_TAG" ]; then
+            gh release download "$RELEASE_TAG" --pattern '*.deb'
+          else
+            gh release download --pattern '*.deb'
+          fi
           gh release download --pattern '*.deb'
           cd -
           tree
