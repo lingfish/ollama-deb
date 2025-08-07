@@ -20,7 +20,7 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
-      
+
       - name: Install reprepro
         run: |
           sudo apt-get update
@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p debian-repo/{apt,deb,reprepro/{conf,db}}
           mkdir -p debian-repo/deb/bookworm
-          
+
       - name: Download latest release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -39,7 +39,7 @@ jobs:
           gh release download --pattern '*.deb'
           cd -
           tree
-          
+
       - name: Run reprepro
         run: |
           cd debian-repo
@@ -60,12 +60,12 @@ jobs:
 #          git commit -m "Update ollama to ${GITHUB_REF_NAME}"
 #          git push
 
-        - name: Push to R2
-          uses: ryand56/r2-upload-action@latest
-          with:
-            r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
-            r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-            r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-            r2-bucket: ${{ secrets.R2_BUCKET }}
-            source-dir: debian-repo
-            destination-dir: ./
+      - name: Push to R2
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: debian-repo
+          destination-dir: ./
