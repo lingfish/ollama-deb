@@ -24,10 +24,17 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
+      - name: Install repo for newer reprepro
+        uses: gerlero/add-apt-repository@v1
+        with:
+          uri: https://raw.githubusercontent.com/Aetherinox/proteus-apt-repo/main
+          key: https://github.com/Aetherinox.gpg
+
       - name: Install reprepro
         run: |
           sudo apt-get update
           sudo apt-get install -y reprepro tree
+          reprepro --version
 
       - name: Create dirs if needed
         run: |
