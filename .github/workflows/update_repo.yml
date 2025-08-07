@@ -41,11 +41,12 @@ jobs:
         run: |
           cd debian-repo/deb/bookworm
           if [ -n "$RELEASE_TAG" ]; then
+            echo "Downloading tag $RELEASE_TAG..."
             gh release download "$RELEASE_TAG" --pattern '*.deb'
           else
+            echo "Downloading latest release..."
             gh release download --pattern '*.deb'
           fi
-          gh release download --pattern '*.deb'
           cd -
           tree
 
@@ -60,14 +61,15 @@ jobs:
           reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb bookworm $current/deb/bookworm/*deb
           cd dists/bookworm
           cat Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > Release.gpg
+          rm -rf $current/deb
 
-#      - name: Checkin new stuff
-#        run: |
-#          git config --global user.name "${{ github.actor }}"
-#          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-#          git add debian-repo
-#          git commit -m "Update ollama to ${GITHUB_REF_NAME}"
-#          git push
+      - name: Checkin new stuff
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add debian-repo/reprepro
+          git commit -m "Update ollama to ${GITHUB_REF_NAME}"
+          git push
 
       - name: Push to R2
         uses: ryand56/r2-upload-action@latest
