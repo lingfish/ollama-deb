@@ -10,10 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#        with:
-#          lfs: true
+      - name: Checkout
+        uses: actions/checkout@v4
       
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
