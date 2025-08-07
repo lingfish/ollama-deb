@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          lfs: true
       
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
@@ -52,10 +52,20 @@ jobs:
           cd dists/bookworm
           cat Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > Release.gpg
 
-      - name: Checkin new stuff
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add debian-repo
-          git commit -m "Update ollama to ${GITHUB_REF_NAME}"
-          git push
+#      - name: Checkin new stuff
+#        run: |
+#          git config --global user.name "${{ github.actor }}"
+#          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+#          git add debian-repo
+#          git commit -m "Update ollama to ${GITHUB_REF_NAME}"
+#          git push
+
+        - name: Push to R2
+          uses: ryand56/r2-upload-action@latest
+          with:
+            r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+            r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+            r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+            r2-bucket: ${{ secrets.R2_BUCKET }}
+            source-dir: debian-repo
+            destination-dir: ./
