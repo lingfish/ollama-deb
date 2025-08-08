@@ -127,4 +127,12 @@ jobs:
           body_path: CONTENTS.md
 
   update-repo:
-    uses: lingfish/ollama-deb/.github/workflows/update_repo.yml@main
+    uses: ./.github/workflows/update_repo.yml
+    secrets:
+      personal_access_token: ${{ secrets.token }}
+      gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+      passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+      r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+      r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      r2-bucket: ${{ secrets.R2_BUCKET }}
