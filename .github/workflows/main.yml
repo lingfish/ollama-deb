@@ -125,3 +125,6 @@ jobs:
         with:
           files: "*.deb"
           body_path: CONTENTS.md
+
+  update-repo:
+    uses: lingfish/ollama-deb/.github/workflows/update_repo.yml@main
