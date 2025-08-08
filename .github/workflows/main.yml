@@ -127,6 +127,7 @@ jobs:
           body_path: CONTENTS.md
 
   update-repo:
+    needs: release
     uses: ./.github/workflows/update_repo.yml
     secrets:
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
