@@ -10,8 +10,9 @@ on:
 #  workflow_run:
 #    workflows: [Build new release v2]
 #    types: [completed]
-  release:
-    types: [released]
+#  release:
+#    types: [released]
+  workflow_call:
 
 jobs:
   update-repo:
