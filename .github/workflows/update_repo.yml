@@ -7,9 +7,11 @@ on:
         description: 'GitHub release tag to download (.deb from). Leave blank for latest'
         required: false
         default: ''
-  workflow_run:
-    workflows: [Build new release v2]
-    types: [completed]
+#  workflow_run:
+#    workflows: [Build new release v2]
+#    types: [completed]
+  release:
+    types: [released]
 
 jobs:
   update-repo:
