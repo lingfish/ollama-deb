@@ -23,10 +23,10 @@ jobs:
       with:
         debug-only: true
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'This issue is stale because it has been open 14 days with no activity. Remove stale label or comment or this will be closed in 7 days.'
+        stale-issue-message: 'This issue is stale because it has been open 7 days with no activity. Remove stale label or comment or this will be closed in 7 days.'
         #stale-pr-message: 'This PR is stale because it has been open 45 days with no activity. Remove stale label or comment or this will be closed in 10 days.'
         close-issue-message: 'This issue was closed because it has been stalled for 7 days with no activity.'
-        days-before-stale: 14
+        days-before-stale: 7
         days-before-close: 7
         days-before-pr-close: -1
           
