@@ -1,5 +1,7 @@
 # ollama-deb
 
+[![Build new release v2](https://github.com/lingfish/ollama-deb/actions/workflows/main.yml/badge.svg)](https://github.com/lingfish/ollama-deb/actions/workflows/main.yml)
+
 This is a GitHub workflow to build Debian packages of [ollama](https://github.com/ollama/ollama/) based on tags.
 
 It installs the same files as the binary tarballs that you can download from
