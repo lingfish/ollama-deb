@@ -1,6 +1,6 @@
 # ollama-deb
 
-[![Build new release v2](https://github.com/lingfish/ollama-deb/actions/workflows/main.yml/badge.svg)](https://github.com/lingfish/ollama-deb/actions/workflows/main.yml)
+![GitHub Release](https://img.shields.io/github/v/release/lingfish/ollama-deb)
 
 This is a GitHub workflow to build Debian packages of [ollama](https://github.com/ollama/ollama/) based on tags.
 
