@@ -88,6 +88,7 @@ jobs:
           cd dists/bookworm
           cat Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > Release.gpg
           rm -rf $current/deb
+          rm -rf $current/apt/pool
 
       - name: Checkin new stuff
         run: |
