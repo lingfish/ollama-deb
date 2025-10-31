@@ -185,7 +185,7 @@ jobs:
           VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
 
   update-repo:
-    needs: release
+    needs: [build, release]
     uses: ./.github/workflows/update_repo.yml
     secrets:
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
