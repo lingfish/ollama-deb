@@ -174,6 +174,7 @@ jobs:
         with:
           files: "*.deb"
           body_path: CONTENTS.md
+          tag_name: ${{ needs.build.outputs.VERSION_REF }}
         env:
           # expose version metadata to this job too if needed
           VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
