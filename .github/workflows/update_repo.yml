@@ -13,6 +13,16 @@ on:
 #  release:
 #    types: [released]
   workflow_call:
+    inputs:
+      VERSION_REF:
+        required: true
+        type: string
+      VERSION_NO_V:
+        required: true
+        type: string
+      VERSION_NO_V_DEB:
+        required: true
+        type: string
     secrets:
       GPG_PRIVATE_KEY:
         required: true
@@ -31,6 +41,12 @@ jobs:
   update-repo:
     runs-on: ubuntu-latest
     steps:
+      - name: Set version env from inputs
+        run: |
+          echo "VERSION_REF=${{ inputs.VERSION_REF }}" >> $GITHUB_ENV
+          echo "VERSION_NO_V=${{ inputs.VERSION_NO_V }}" >> $GITHUB_ENV
+          echo "VERSION_NO_V_DEB=${{ inputs.VERSION_NO_V_DEB }}" >> $GITHUB_ENV
+          
       - name: Checkout
         uses: actions/checkout@v4
         with:
