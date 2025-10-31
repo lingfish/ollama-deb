@@ -4,7 +4,7 @@
 set -euo pipefail
 
 OUTPUT="CONTENTS.md"
-RELEASE_NAME="${GITHUB_REF_NAME:-unknown}"
+RELEASE_NAME="${VERSION_REF:-unknown}"
 
 # Header
 {
