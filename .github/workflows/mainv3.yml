@@ -52,6 +52,10 @@ jobs:
           echo "Using VERSION_NO_V=$VERSION_NO_V"
           echo "Using VERSION_NO_V_DEB=$VERSION_NO_V_DEB"
 
+      - name: Speed up dpkg a bit
+        run: |
+          sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
+
       - name: Free Disk Space
         uses: endersonmenezes/free-disk-space@v3  # Use @main for latest, @v3 for stable
         with:
@@ -67,7 +71,6 @@ jobs:
       - name: Install required packages
         run: |
           sudo apt update
-          sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
 
       - name: Download latest ollama
