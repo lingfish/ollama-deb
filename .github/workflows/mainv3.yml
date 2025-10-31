@@ -14,10 +14,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Expose variables computed in the 'set_version' step as job outputs so other jobs can access them via needs.build.outputs.*
+    outputs:
+      VERSION_REF: ${{ steps.set_version.outputs.VERSION_REF }}
+      VERSION_NO_V: ${{ steps.set_version.outputs.VERSION_NO_V }}
+      VERSION_NO_V_DEB: ${{ steps.set_version.outputs.VERSION_NO_V_DEB }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Determine version to use (manual input overrides ref)
+        id: set_version
         run: |
           # If run manually and an input 'version' was provided, use it.
           # Otherwise fall back to GITHUB_REF_NAME (the tag when triggered by push).
@@ -31,9 +37,16 @@ jobs:
           VERSION_NO_V="${VERSION_REF#v}"
           VERSION_NO_V_DEB="${VERSION_NO_V/-rc/~rc}"
 
+          # Make variables available to other steps in this job
           echo "VERSION_REF=$VERSION_REF" >> $GITHUB_ENV
           echo "VERSION_NO_V=$VERSION_NO_V" >> $GITHUB_ENV
           echo "VERSION_NO_V_DEB=$VERSION_NO_V_DEB" >> $GITHUB_ENV
+
+          # Also expose variables as step outputs so they can be mapped to job outputs
+          # and consumed by other jobs via needs.build.outputs.*
+          echo "VERSION_REF=$VERSION_REF" >> $GITHUB_OUTPUT
+          echo "VERSION_NO_V=$VERSION_NO_V" >> $GITHUB_OUTPUT
+          echo "VERSION_NO_V_DEB=$VERSION_NO_V_DEB" >> $GITHUB_OUTPUT
 
           echo "Using VERSION_REF=$VERSION_REF"
           echo "Using VERSION_NO_V=$VERSION_NO_V"
@@ -127,6 +140,10 @@ jobs:
       - name: Generate CONTENTS.md
         env:
           GH_TOKEN: ${{ github.token }}
+          # Example of making use of the version variables in this job:
+          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
+          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
+          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
         run: |
           ./generate_contents_md.sh
 
@@ -157,6 +174,11 @@ jobs:
         with:
           files: "*.deb"
           body_path: CONTENTS.md
+        env:
+          # expose version metadata to this job too if needed
+          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
+          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
+          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
 
   update-repo:
     needs: release
