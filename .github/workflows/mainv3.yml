@@ -1,0 +1,170 @@
+name: Build new release v3
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Optional: version tag or ref to build (e.g. v1.2.3 or 1.2.3). If provided, this will be used instead of the push tag.'
+        required: false
+        default: ''
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine version to use (manual input overrides ref)
+        run: |
+          # If run manually and an input 'version' was provided, use it.
+          # Otherwise fall back to GITHUB_REF_NAME (the tag when triggered by push).
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION_REF="${{ github.event.inputs.version }}"
+          else
+            VERSION_REF="${GITHUB_REF_NAME}"
+          fi
+
+          # Strip leading 'v' for numeric version and convert -rc to ~rc for deb packages.
+          VERSION_NO_V="${VERSION_REF#v}"
+          VERSION_NO_V_DEB="${VERSION_NO_V/-rc/~rc}"
+
+          echo "VERSION_REF=$VERSION_REF" >> $GITHUB_ENV
+          echo "VERSION_NO_V=$VERSION_NO_V" >> $GITHUB_ENV
+          echo "VERSION_NO_V_DEB=$VERSION_NO_V_DEB" >> $GITHUB_ENV
+
+          echo "Using VERSION_REF=$VERSION_REF"
+          echo "Using VERSION_NO_V=$VERSION_NO_V"
+          echo "Using VERSION_NO_V_DEB=$VERSION_NO_V_DEB"
+
+      - name: Free Disk Space
+        uses: endersonmenezes/free-disk-space@v3  # Use @main for latest, @v3 for stable
+        with:
+          remove_android: true
+          remove_dotnet: true
+          remove_haskell: true
+          remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+          remove_packages_one_command: true
+          remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /u[...]
+          rm_cmd: "rm"  # Use 'rmz' for faster deletion (default: 'rm')
+          testing: false
+          
+      - name: Install required packages
+        run: |
+          sudo apt update
+          sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
+          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
+
+      - name: Download latest ollama
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tgz
+
+      - name: Download ollama source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama --archive tar.gz
+
+      - name: Download ollama rocm tarball
+        run: |
+          wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tgz'
+
+      - name: Create skeleton and extract ollama
+        run: |
+          mkdir -p ollama-${VERSION_NO_V}/tmp
+          tar zxvf ollama-linux-amd64.tgz -C ollama-${VERSION_NO_V}/tmp
+
+      - name: Extract ollama docs and license
+        run: |
+          tar -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
+
+      - name: Extract AMD rocm stuff
+        run: |
+          mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
+          tar zxvf ollama-linux-amd64-rocm.tgz -C ollama-${VERSION_NO_V}/tmp/rocm
+
+      - name: Run dh_make to create packaging files
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          tree
+          cd ollama-${VERSION_NO_V}/
+          dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
+          cp -v ../packaging_files/* debian/
+
+      - name: Build the package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          cd ollama-${VERSION_NO_V}/
+          dpkg-buildpackage -b -us -uc
+          cd ..
+          ls -lR
+
+      - name: Upload deb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-package
+          path: "*.deb"
+
+  release-notes:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download deb artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deb-package
+
+      - name: Generate CONTENTS.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ./generate_contents_md.sh
+
+      - name: Upload release-notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes-md
+          path: CONTENTS.md
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build, release-notes]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download deb artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deb-package
+
+      - name: Download release-notes
+        uses: actions/download-artifact@v4
+        with:
+          name: release-notes-md
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.deb"
+          body_path: CONTENTS.md
+
+  update-repo:
+    needs: release
+    uses: ./.github/workflows/update_repo.yml
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
