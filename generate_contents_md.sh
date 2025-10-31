@@ -6,6 +6,8 @@ set -euo pipefail
 OUTPUT="CONTENTS.md"
 RELEASE_NAME="${VERSION_REF:-unknown}"
 
+env
+
 # Header
 {
   echo "# Package information"
