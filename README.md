@@ -17,6 +17,10 @@ source documentation.
 
 [Click here](https://lingfish.github.io/ollama-deb/) to get instructions on repo usage.
 
+**NOTE**: the `sources.list` codename has changed from Debian distro names (like `bookworm`) to `stable`. Ollama themselves
+don't specify what releases/distros they support, so I've changed to using an agnostic one too. `bookworm` will remain for
+a while, and then be removed.
+
 ### Manual deb file install
 Head over to the [releases page](https://github.com/lingfish/ollama-deb/releases) to download.
 
