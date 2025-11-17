@@ -97,8 +97,9 @@ jobs:
           reprepro --dbdir $reprepro/db --confdir $reprepro/conf translatelegacyreferences
           for codename in bookworm stable
           do
-            reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb $codename $current/deb/stable/*deb
-            cat dists/$codename/Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > dists/$codename/Release.gpg
+            if reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb $codename $current/deb/stable/*deb; then
+              cat dists/$codename/Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > dists/$codename/Release.gpg
+            fi
           done
           rm -rf $current/deb
           rm -rf $current/apt/pool
