@@ -93,7 +93,8 @@
     <div class="container">
         <div class="section">
             <div class="note">
-                <strong>Note:</strong> This repo currently only supports Debian bookworm.
+                <strong>Note:</strong> The <code>sources.list</code> codename has changed from Debian distro names (like <code>bookworm</code>) to <code>stable</code>. Ollama themselves don't specify
+                what releases/distros they support, so I've changed to using an agnostic one too. <code>bookworm</code> will remain for a while, and then be removed.
             </div>
             <h2>Repository setup</h2>
             <p>Run the following comands to setup the repo:</p>
@@ -102,7 +103,7 @@
 curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor
 
 ## Add repository
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt bookworm main" | sudo tee /etc/apt/sources.list.d/ollama.list
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list
 
 ## Update package lists
 sudo apt update</code></pre>
