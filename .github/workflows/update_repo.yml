@@ -73,14 +73,14 @@ jobs:
       - name: Create dirs if needed
         run: |
           mkdir -p debian-repo/{apt,deb,reprepro/{conf,db}}
-          mkdir -p debian-repo/deb/bookworm
+          mkdir -p debian-repo/deb/stable
 
       - name: Download latest release or specified tag
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.inputs.release_tag }}
         run: |
-          cd debian-repo/deb/bookworm
+          cd debian-repo/deb/stable
           echo "Downloading tag ${RELEASE_TAG:-$VERSION_REF}..."
           gh release download "${RELEASE_TAG:-$VERSION_REF}" --pattern '*.deb'
           cd -
@@ -95,9 +95,11 @@ jobs:
           echo $reprepro
           cd apt
           reprepro --dbdir $reprepro/db --confdir $reprepro/conf translatelegacyreferences
-          reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb bookworm $current/deb/bookworm/*deb
-          cd dists/bookworm
-          cat Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > Release.gpg
+          for codename in bookworm stable
+          do
+            reprepro --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb $codename $current/deb/stable/*deb
+            cat dists/$codename/Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > dists/$codename/Release.gpg
+          done
           rm -rf $current/deb
           rm -rf $current/apt/pool
 
