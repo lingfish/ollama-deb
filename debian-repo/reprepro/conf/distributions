@@ -6,3 +6,12 @@ Components: main
 Description: APT repository for ollama packages
 SignWith: 1C9E802275991A570F4BDBEB91A978214AE92757
 Limit: 8
+
+Origin: lingfish
+Codename: stable
+Suite: stable
+Architectures: amd64
+Components: main
+Description: APT repository for ollama packages
+SignWith: 1C9E802275991A570F4BDBEB91A978214AE92757
+Limit: 8
