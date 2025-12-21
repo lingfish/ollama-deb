@@ -111,7 +111,7 @@ echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollam
             
             <h3>Add repository (new deb822 format)</h3>
             <pre><code>
-cat <<EOF > /etc/apt/sources.list.d/ollama.sources
+cat <<EOF > /tmp/ollama.sources
 Types: deb
 URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
 Suites: stable
@@ -119,7 +119,9 @@ Components: main
 Architectures: amd64
 Signed-By: /etc/apt/keyrings/ollama-repo.gpg
 EOF
+mv /tmp/ollama.sources /etc/apt/sources.list.d
             </code></pre>
+            Of course, you could just paste the above into your favourite editor and save as root.
             
             <h3>Update package lists</h3>
             <pre><code>
