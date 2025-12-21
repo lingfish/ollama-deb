@@ -99,15 +99,33 @@
             <h2>Repository setup</h2>
             <p>Run the following comands to setup the repo:</p>
 
-            <pre><code>## Add GPG key
+            <h3>Add GPG key</h3>
+            <pre><code>
 curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor
-
-## Add repository
+            </code></pre>
+            
+            <h3>Add repository (old style format)</h3>
+            <pre><code>
 echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list
-
-## Update package lists
+            </code></pre>
+            
+            <h3>Add repository (new deb822 format)</h3>
+            <pre><code>
+cat <<EOF > /etc/apt/sources.list.d/ollama.sources
+Types: deb
+URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/ollama-repo.gpg
+EOF
+            </code></pre>
+            
+            <h3>Update package lists</h3>
+            <pre><code>
 sudo apt update</code></pre>
-
+</code></pre>
+            
             <p>I realise that the repo URL looks weird. See <a href="https://github.com/lingfish/ollama-deb/issues/5">here</a> for details.
             This URL is pointing to a Cloudflare worker. I do this in my free time, and I'm not willing to pay for any hosting
             of the (abnormally-large) package files.</p>
