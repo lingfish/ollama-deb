@@ -27,9 +27,15 @@
         }
 
         .container {
-            max-width: 80%;
+            width: 1024px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100%;
+            }
         }
 
         header {
