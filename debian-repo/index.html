@@ -70,7 +70,10 @@
             color: var(--secondary-color);
             /*border-bottom: 2px solid var(--secondary-color);*/
             padding-bottom: 0.5rem;
+            padding-top: 0.5rem;
             margin-bottom: 1rem;
+            text-decoration: underline;
+            text-underline-position: under;
         }
 
         pre {
@@ -116,10 +119,15 @@
             <h3>Add GPG key</h3>
             <pre><code>curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor </code></pre>
             
-            <h3>Add repository (old style format)</h3>
-            <pre><code>echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list </code></pre>
-            
-            <h3>Add repository (new deb822 format)</h3>
+            <h3>Add repository</h3>
+            Click to expand which format you need:
+            <details>
+                <summary>Pre deb822 file format</summary>
+                <pre><code>echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list </code></pre>
+            </details>
+
+            <details>
+                <summary>New deb822 file format</summary>
             <pre><code>cat <<EOF > /tmp/ollama.sources
 Types: deb
 URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
@@ -129,11 +137,12 @@ Architectures: amd64
 Signed-By: /etc/apt/keyrings/ollama-repo.gpg
 EOF
 mv /tmp/ollama.sources /etc/apt/sources.list.d</code></pre>
-            Of course, you could just paste the above into your favourite editor and save as root.
-            
+            </details>
+            <p>Of course, you could just paste the above into your favourite editor and save as root.</p>
+
             <h3>Update package lists</h3>
             <pre><code>sudo apt update</code></pre> </code></pre>
-            
+
             <p>I realise that the repo URL looks weird. See <a href="https://github.com/lingfish/ollama-deb/issues/5">here</a> for details.
             This URL is pointing to a Cloudflare worker. I do this in my free time, and I'm not willing to pay for any hosting
             of the (abnormally-large) package files.</p>
