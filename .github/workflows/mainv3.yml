@@ -213,7 +213,7 @@ jobs:
           # Optional (recommended) mail server password:
           #password: ${{secrets.MAIL_PASSWORD}}
           # Required mail subject:
-          subject: "GitHub job \"${{ github.job }}\" in repo ${{ github.repository }}, status: ${{ job.status }}"
+          subject: GitHub workflow failed in repo ${{ github.repository }}
           # Required recipients' addresses:
           to: ${{secrets.MAIL_TO}}
           # Required sender full name (address can be skipped):
@@ -222,17 +222,7 @@ jobs:
           body: |
             Repo: ${{ github.repository }}
             Workflow: ${{ github.workflow }}
-            Job: ${{ github.job }}
-            Status: ${{ job.status }}
 
-            All vars:
-            ${{ toJson(github) }}
-
-            Steps:
-            ${{ toJson(steps) }}
-
-            Job:
-            ${{ toJson(job) }}
           # Optional HTML body read from file:
           #html_body: file://README.html
 
