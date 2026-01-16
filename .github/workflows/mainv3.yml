@@ -227,6 +227,12 @@ jobs:
 
             All vars:
             ${{ toJson(github) }}
+
+            Steps:
+            ${{ toJson(steps) }}
+
+            Jobs:
+            ${{ toJson(jobs) }}
           # Optional HTML body read from file:
           #html_body: file://README.html
 
