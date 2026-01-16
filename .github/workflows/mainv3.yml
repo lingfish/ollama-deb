@@ -200,7 +200,7 @@ jobs:
       VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
 
   email:
-    if: ${{ always() }}
+    if: ${{ failure() }}
     runs-on: ubuntu-latest
     needs: [build, release-notes, release, update-repo]
     steps:
