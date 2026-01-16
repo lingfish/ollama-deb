@@ -15,7 +15,7 @@ jobs:
           # Optional (recommended) mail server password:
           #password: ${{secrets.MAIL_PASSWORD}}
           # Required mail subject:
-          subject: GitHub job \"${{ github.job }}\" in repo ${{ github.repository }}, status: ${{ job.status }}
+          subject: "GitHub job \"${{ github.job }}\" in repo ${{ github.repository }}, status: ${{ job.status }}"
           # Required recipients' addresses:
           to: ${{secrets.MAIL_TO}}
           # Required sender full name (address can be skipped):
