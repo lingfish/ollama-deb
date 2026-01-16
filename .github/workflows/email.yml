@@ -21,7 +21,9 @@ jobs:
           # Required sender full name (address can be skipped):
           from: ${{secrets.MAIL_FROM}}
           # Optional plain body:
-          body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+          body: |
+            ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+            ${{ toJson(github) }}
           # Optional HTML body read from file:
           #html_body: file://README.html
           # Optional carbon copy recipients:
