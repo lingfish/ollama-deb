@@ -198,3 +198,46 @@ jobs:
       VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
       VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
       VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
+
+  email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send email
+        if: always()
+        uses: dawidd6/action-send-mail@v7
+        with:
+          connection_url: ${{secrets.MAIL_CONNECTION}}
+          # Optional (recommended) mail server username:
+          #username: ${{secrets.MAIL_USERNAME}}
+          # Optional (recommended) mail server password:
+          #password: ${{secrets.MAIL_PASSWORD}}
+          # Required mail subject:
+          subject: "GitHub job \"${{ github.job }}\" in repo ${{ github.repository }}, status: ${{ job.status }}"
+          # Required recipients' addresses:
+          to: ${{secrets.MAIL_TO}}
+          # Required sender full name (address can be skipped):
+          from: ${{secrets.MAIL_FROM}}
+          # Optional plain body:
+          body: |
+            Repo: ${{ github.repository }}
+            Workflow: ${{ github.workflow }}
+            Job: ${{ github.job }}
+            Status: ${{ job.status }}
+
+            All vars:
+            ${{ toJson(github) }}
+          # Optional HTML body read from file:
+          #html_body: file://README.html
+
+          # Optional unsigned/invalid certificates allowance:
+          #ignore_cert: true
+          # Optional converting Markdown to HTML (set content_type to text/html too):
+          convert_markdown: true
+          # Optional attachments:
+          #attachments: attachments.zip,git.diff,./dist/static/*.js
+          # Optional priority: 'high', 'normal' (default) or 'low'
+          #priority: low
+          # Optional nodemailerlog: true/false
+          nodemailerlog: true
+          # Optional nodemailerdebug: true/false if true lognodem will also be set true
+          nodemailerdebug: true
