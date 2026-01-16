@@ -15,14 +15,19 @@ jobs:
           # Optional (recommended) mail server password:
           #password: ${{secrets.MAIL_PASSWORD}}
           # Required mail subject:
-          subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+          subject: GitHub job "${{ github.job }}" in repo ${{ github.repository }}, status: ${{ job.status }}
           # Required recipients' addresses:
           to: ${{secrets.MAIL_TO}}
           # Required sender full name (address can be skipped):
           from: ${{secrets.MAIL_FROM}}
           # Optional plain body:
           body: |
-            ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+            Repo: ${{ github.repository }}
+            Workflow: ${{ github.workflow }}
+            Job: ${{ github.job }}
+            Status: ${{ job.status }}
+
+            All vars:
             ${{ toJson(github) }}
           # Optional HTML body read from file:
           #html_body: file://README.html
