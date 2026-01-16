@@ -201,6 +201,7 @@ jobs:
 
   email:
     runs-on: ubuntu-latest
+    needs: [build, release-notes, release]
     steps:
       - name: Send email
         if: always()
