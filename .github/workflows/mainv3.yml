@@ -201,10 +201,10 @@ jobs:
 
   email:
     runs-on: ubuntu-latest
-    needs: [build, release-notes, release]
+    needs: [build, release-notes, release, update-repo]
     steps:
       - name: Send email
-        if: always()
+        if: ${{ always() }}
         uses: dawidd6/action-send-mail@v7
         with:
           connection_url: ${{secrets.MAIL_CONNECTION}}
