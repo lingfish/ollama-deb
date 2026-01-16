@@ -77,7 +77,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tgz
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tar.zst
 
       - name: Download ollama source
         env:
@@ -87,12 +87,12 @@ jobs:
 
       - name: Download ollama rocm tarball
         run: |
-          wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tgz'
+          wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst'
 
       - name: Create skeleton and extract ollama
         run: |
           mkdir -p ollama-${VERSION_NO_V}/tmp
-          tar zxvf ollama-linux-amd64.tgz -C ollama-${VERSION_NO_V}/tmp
+          tar --zstd -xvf ollama-linux-amd64.tar.zst -C ollama-${VERSION_NO_V}/tmp
 
       - name: Extract ollama docs and license
         run: |
@@ -101,7 +101,7 @@ jobs:
       - name: Extract AMD rocm stuff
         run: |
           mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
-          tar zxvf ollama-linux-amd64-rocm.tgz -C ollama-${VERSION_NO_V}/tmp/rocm
+          tar --zstd -xvf ollama-linux-amd64-rocm.tar.zst -C ollama-${VERSION_NO_V}/tmp/rocm
 
       - name: Run dh_make to create packaging files
         env:
