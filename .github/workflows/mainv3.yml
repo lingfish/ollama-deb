@@ -231,8 +231,8 @@ jobs:
             Steps:
             ${{ toJson(steps) }}
 
-            Jobs:
-            ${{ toJson(jobs) }}
+            Job:
+            ${{ toJson(job) }}
           # Optional HTML body read from file:
           #html_body: file://README.html
 
