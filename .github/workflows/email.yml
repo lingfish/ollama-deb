@@ -1,4 +1,4 @@
-name: Build new release v3
+name: Send email
 
 on:
   workflow_dispatch:
@@ -11,9 +11,9 @@ jobs:
         with:
           connection_url: ${{secrets.MAIL_CONNECTION}}
           # Optional (recommended) mail server username:
-          username: ${{secrets.MAIL_USERNAME}}
+          #username: ${{secrets.MAIL_USERNAME}}
           # Optional (recommended) mail server password:
-          password: ${{secrets.MAIL_PASSWORD}}
+          #password: ${{secrets.MAIL_PASSWORD}}
           # Required mail subject:
           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
           # Required recipients' addresses:
