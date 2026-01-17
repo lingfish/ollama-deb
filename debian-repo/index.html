@@ -141,7 +141,7 @@ mv /tmp/ollama.sources /etc/apt/sources.list.d</code></pre>
             <p>Of course, you could just paste the above into your favourite editor and save as root.</p>
 
             <h3>Update package lists</h3>
-            <pre><code>sudo apt update</code></pre> </code></pre>
+            <pre><code>sudo apt update</code></pre>
 
             <p>I realise that the repo URL looks weird. See <a href="https://github.com/lingfish/ollama-deb/issues/5">here</a> for details.
             This URL is pointing to a Cloudflare worker. I do this in my free time, and I'm not willing to pay for any hosting
@@ -168,14 +168,14 @@ mv /tmp/ollama.sources /etc/apt/sources.list.d</code></pre>
         <div class="section">
             <h2>Other notes</h2>
             <h3>APT pinning</h3>
-            <p>If you don't want the release candidates, and only "stable" versions, try the following in, say, `/etc/apt/preferences.d/ollama`:</p>
+            <p>If you don't want the release candidates, and only "stable" versions, try the following in, say, <code>/etc/apt/preferences.d/ollama</code>:</p>
 
             <pre><code>Package: /./
 Pin: origin ollama-repo.jason-9eb.workers.dev
 Pin: version /rc/
 Pin-Priority: -1</code></pre>
 
-            <p>And then just do the usual `apt update`.</p>
+            <p>And then just do the usual <code>apt update</code>.</p>
         </div>
     </div>
 </body>
