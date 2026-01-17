@@ -13,7 +13,7 @@ It will also install, enable and start a systemd service, as well as add a syste
 source documentation.
 
 ## Usage
-### NEW! Use my APT repo!
+### Use my APT repo
 
 [Click here](https://lingfish.github.io/ollama-deb/) to get instructions on repo usage.
 
