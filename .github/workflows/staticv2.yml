@@ -34,7 +34,13 @@ jobs:
         run: |
           cd debian-repo
           npm install
+          ls -l
+
+      - name: Run 11ty
+        run: |
+          cd debian-repo
           npx @11ty/eleventy --pathprefix=/ollama-deb/
+          ls -l
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
