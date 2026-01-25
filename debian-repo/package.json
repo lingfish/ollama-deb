@@ -1,0 +1,20 @@
+{
+  "name": "ollama-deb-doc",
+  "version": "1.0.0",
+  "description": "Site doco",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "lingfish",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "@11ty/eleventy-img": "^6.0.1",
+    "@11ty/eleventy-navigation": "^0.3.5",
+    "@11ty/eleventy-plugin-rss": "^2.0.4",
+    "sharp": "^0.33.5"
+  }
+}
