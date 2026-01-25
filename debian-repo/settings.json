@@ -1,0 +1,7 @@
+{
+    "siteTitle": "ollama-deb",
+    "siteDescription": "Unofficial Debian package repository documentation",
+    "productionUrl": "https://lingfish.github.io/ollama-deb/",
+    "searchEnabled": false,
+    "tocEnabled": true
+}
