@@ -12,6 +12,8 @@ The contents of the `.deb` file can be seen on the [releases page](https://githu
 It will also install, enable and start a systemd service, as well as add a system user to run ollama.  It also adds the
 source documentation.
 
+<a href="https://www.buymeacoffee.com/lingfish" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ## Usage
 ### Use my APT repo
 
