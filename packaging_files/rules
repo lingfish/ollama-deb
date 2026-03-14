@@ -28,5 +28,23 @@ export DH_VERBOSE = 1
 # Don't run strip
 override_dh_strip:
 
-override_dh_shlibdeps:
-	dh_shlibdeps -Xlib/ollama
+# Build different packages for different architectures
+override_dh_auto_build:
+	@echo "Building AMD64 package..."
+	cd .. && dpkg-buildpackage -b -us -uc -aamd64
+	@echo "Building ARM64 package..."
+	cd .. && cd ollama-${VERSION_NO_V}/tmp-arm64 && \
+	  cp -r /home/runner/work/ollama-deb/packaging_files/* debian/ && \
+	  sed -i 's/Architecture: amd64/Architecture: arm64/' debian/control && \
+	  dpkg-buildpackage -b -us -uc -aarm64
+	@echo "Building ARM64 JetPack 5 package..."
+	cd .. && cd ollama-${VERSION_NO_V}/tmp-arm64-jetpack5 && \
+	  cp -r /home/runner/work/ollama-deb/packaging_files/* debian/ && \
+	  sed -i 's/Architecture: amd64/Architecture: arm64/' debian/control && \
+	  dpkg-buildpackage -b -us -uc -aarm64
+	@echo "Building ARM64 JetPack 6 package..."
+	cd .. && cd ollama-${VERSION_NO_V}/tmp-arm64-jetpack6 && \
+	  cp -r /home/runner/work/ollama-deb/packaging_files/* debian/ && \
+	  sed -i 's/Architecture: amd64/Architecture: arm64/' debian/control && \
+	  dpkg-buildpackage -b -us -uc -aarm64
+	@echo "All architectures built successfully!"

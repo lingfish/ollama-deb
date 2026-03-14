@@ -17,25 +17,42 @@ Run the following comands to setup the repo:
 
 ### Add GPG key
 ```bash
-curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor 
+curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor
 ```
 
 ### Add repository
 Click to expand which format you need:
 
             <details name="repo">
-                <summary>Pre deb822 file format</summary>
+                <summary>Pre deb822 file format (AMD64)</summary>
 <pre><code class="language-bash">echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list</code></pre>
             </details>
 
             <details name="repo">
-                <summary>New deb822 file format</summary>
+                <summary>New deb822 file format (AMD64)</summary>
 <pre><code class="language-bash">cat &lt;&lt;EOF &gt; /etc/apt/sources.list.d/ollama.sources
 Types: deb
 URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
 Suites: stable
 Components: main
 Architectures: amd64
+Signed-By: /etc/apt/keyrings/ollama-repo.gpg
+EOF</code></pre>
+            </details>
+
+            <details name="repo">
+                <summary>Pre deb822 file format (ARM64)</summary>
+<pre><code class="language-bash">echo "deb [arch=arm64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama-arm64.list</code></pre>
+            </details>
+
+            <details name="repo">
+                <summary>New deb822 file format (ARM64)</summary>
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt; /etc/apt/sources.list.d/ollama-arm64.sources
+Types: deb
+URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
+Suites: stable
+Components: main
+Architectures: arm64
 Signed-By: /etc/apt/keyrings/ollama-repo.gpg
 EOF</code></pre>
             </details>

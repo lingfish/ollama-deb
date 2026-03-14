@@ -26,6 +26,54 @@ Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other larg
  .
  One of the recommended packages should/will enable GPU support.
 
+Package: ollama-arm64
+Section: golang
+Architecture: arm64
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program, ARM64)
+ Ollama ARM64
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models on ARM64 devices.
+ .
+ This package is for standard ARM64 devices.
+
+Package: ollama-arm64-jetpack5
+Section: golang
+Architecture: arm64
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program, JetPack 5)
+ Ollama ARM64 JetPack 5
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models on NVIDIA Jetson devices with JetPack 5.
+ .
+ This package is for NVIDIA Jetson devices running JetPack 5.
+
+Package: ollama-arm64-jetpack6
+Section: golang
+Architecture: arm64
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program, JetPack 6)
+ Ollama ARM64 JetPack 6
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models on NVIDIA Jetson devices with JetPack 6.
+ .
+ This package is for NVIDIA Jetson devices running JetPack 6.
+
 Package: libollama-nvidia
 Section: libs
 Architecture: amd64

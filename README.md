@@ -63,3 +63,36 @@ Processing triggers for libc-bin (2.36-9+deb12u7) ...
 ```
 
 The shared libraries that the ollama team put into their binary tarballs are now split into their own package.
+
+### ARM64 Support
+
+For ARM64 systems (e.g., Raspberry Pi 4, 5, Apple Silicon Macs with Linux, NVIDIA Jetson devices), you need to use the appropriate ARM64 package:
+
+```shell
+# For standard ARM64 devices
+apt install ./ollama_<version>_arm64.deb
+
+# For NVIDIA Jetson with JetPack 5
+apt install ./ollama_<version>_arm64-jetpack5.deb
+
+# For NVIDIA Jetson with JetPack 6
+apt install ./ollama_<version>_arm64-jetpack6.deb
+```
+
+**Important Notes for ARM64:**
+- Make sure to install the correct package for your device architecture
+- JetPack packages are specifically for NVIDIA Jetson devices with different kernel configurations
+- Standard ARM64 packages work on most ARM64 Linux systems (Raspberry Pi, Rockchip, etc.)
+
+### Architecture-Specific Packages
+
+The following packages are available:
+
+| Package | Architecture | Description |
+|---------|--------------|-------------|
+| `ollama` | amd64 | Standard x86_64 build |
+| `libollama-nvidia` | amd64 | NVIDIA GPU libraries (x86_64) |
+| `libollama-amd` | amd64 | AMD GPU libraries (x86_64) |
+| `ollama-arm64` | arm64 | Standard ARM64 build |
+| `ollama-arm64-jetpack5` | arm64 | NVIDIA Jetson with JetPack 5 |
+| `ollama-arm64-jetpack6` | arm64 | NVIDIA Jetson with JetPack 6 |

@@ -78,6 +78,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tar.zst
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-arm64.tar.zst
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-arm64-jetpack5.tar.zst
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-arm64-jetpack6.tar.zst
 
       - name: Download ollama source
         env:
@@ -92,7 +95,13 @@ jobs:
       - name: Create skeleton and extract ollama
         run: |
           mkdir -p ollama-${VERSION_NO_V}/tmp
+          mkdir -p ollama-${VERSION_NO_V}/tmp-arm64
+          mkdir -p ollama-${VERSION_NO_V}/tmp-arm64-jetpack5
+          mkdir -p ollama-${VERSION_NO_V}/tmp-arm64-jetpack6
           tar --zstd -xvf ollama-linux-amd64.tar.zst -C ollama-${VERSION_NO_V}/tmp
+          tar --zstd -xvf ollama-linux-arm64.tar.zst -C ollama-${VERSION_NO_V}/tmp-arm64
+          tar --zstd -xvf ollama-linux-arm64-jetpack5.tar.zst -C ollama-${VERSION_NO_V}/tmp-arm64-jetpack5
+          tar --zstd -xvf ollama-linux-arm64-jetpack6.tar.zst -C ollama-${VERSION_NO_V}/tmp-arm64-jetpack6
 
       - name: Extract ollama docs and license
         run: |
@@ -113,15 +122,47 @@ jobs:
           dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
           cp -v ../packaging_files/* debian/
 
-      - name: Build the package
+      - name: Build AMD64 package
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
         run: |
           cd ollama-${VERSION_NO_V}/
-          dpkg-buildpackage -b -us -uc
+          dpkg-buildpackage -b -us -uc -aamd64
           cd ..
-          ls -lR
+
+      - name: Build ARM64 package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          cd ollama-${VERSION_NO_V}/tmp-arm64
+          cp -r /home/runner/work/ollama-deb/packaging_files/* debian/
+          sed -i 's/Architecture: amd64/Architecture: arm64/' debian/control
+          dpkg-buildpackage -b -us -uc -aarm64
+          cd ../..
+
+      - name: Build ARM64 JetPack 5 package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          cd ollama-${VERSION_NO_V}/tmp-arm64-jetpack5
+          cp -r /home/runner/work/ollama-deb/packaging_files/* debian/
+          sed -i 's/Architecture: amd64/Architecture: arm64/' debian/control
+          dpkg-buildpackage -b -us -uc -aarm64
+          cd ../..
+
+      - name: Build ARM64 JetPack 6 package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          cd ollama-${VERSION_NO_V}/tmp-arm64-jetpack6
+          cp -r /home/runner/work/ollama-deb/packaging_files/* debian/
+          sed -i 's/Architecture: amd64/Architecture: arm64/' debian/control
+          dpkg-buildpackage -b -us -uc -aarm64
+          cd ../..
 
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4

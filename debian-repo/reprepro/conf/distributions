@@ -1,17 +1,19 @@
-Origin: lingfish
-Codename: bookworm
-Suite: stable
-Architectures: amd64
-Components: main
-Description: APT repository for ollama packages
-SignWith: 1C9E802275991A570F4BDBEB91A978214AE92757
-Limit: 8
+# Default distribution for AMD64 packages
+codename: stable
+components: main
+architectures: amd64
+suites: stable
+label: Ollama Debian Repository
+origin: ollama-deb
+description: Official ollama Debian Repository (AMD64)
+signing: GPG
 
-Origin: lingfish
-Codename: stable
-Suite: stable
-Architectures: amd64
-Components: main
-Description: APT repository for ollama packages
-SignWith: 1C9E802275991A570F4BDBEB91A978214AE92757
-Limit: 8
+# ARM64 distribution
+codename: stable
+components: main
+architectures: arm64
+suites: stable
+label: Ollama Debian Repository
+origin: ollama-deb
+description: Official ollama Debian Repository (ARM64)
+signing: GPG
