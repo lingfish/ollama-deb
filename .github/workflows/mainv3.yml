@@ -14,7 +14,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Expose variables computed in the 'set_version' step as job outputs so other jobs can access them via needs.build.outputs.*
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+          - arch: arm64
     outputs:
       VERSION_REF: ${{ steps.set_version.outputs.VERSION_REF }}
       VERSION_NO_V: ${{ steps.set_version.outputs.VERSION_NO_V }}
@@ -73,11 +78,15 @@ jobs:
           sudo apt update
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
 
-      - name: Download latest ollama
+      - name: Download ollama binaries
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tar.zst
+          if [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-arm64.tar.zst
+          else
+            gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tar.zst
+          fi
 
       - name: Download ollama source
         env:
@@ -85,23 +94,43 @@ jobs:
         run: |
           gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama --archive tar.gz
 
-      - name: Download ollama rocm tarball
+      - name: Download AMD ROCm tarball
+        if: matrix.arch == 'amd64'
         run: |
           wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst'
+
+      - name: Download Jetson variants
+        if: matrix.arch == 'arm64'
+        run: |
+          wget 'https://ollama.com/download/ollama-linux-arm64-jetpack5.tar.zst'
+          wget 'https://ollama.com/download/ollama-linux-arm64-jetpack6.tar.zst'
 
       - name: Create skeleton and extract ollama
         run: |
           mkdir -p ollama-${VERSION_NO_V}/tmp
-          tar --zstd -xvf ollama-linux-amd64.tar.zst -C ollama-${VERSION_NO_V}/tmp
+          if [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            tar --zstd -xvf ollama-linux-arm64.tar.zst -C ollama-${VERSION_NO_V}/tmp
+          else
+            tar --zstd -xvf ollama-linux-amd64.tar.zst -C ollama-${VERSION_NO_V}/tmp
+          fi
 
       - name: Extract ollama docs and license
         run: |
           tar -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
-      - name: Extract AMD rocm stuff
+      - name: Extract AMD ROCm or Jetson libs
         run: |
-          mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
-          tar --zstd -xvf ollama-linux-amd64-rocm.tar.zst -C ollama-${VERSION_NO_V}/tmp/rocm
+          if [[ "${{ matrix.arch }}" == "amd64" ]]; then
+            mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
+            tar --zstd -xvf ollama-linux-amd64-rocm.tar.zst -C ollama-${VERSION_NO_V}/tmp/rocm
+          else
+            # Jetson: Extract jetpack5
+            mkdir -p ollama-${VERSION_NO_V}/jetpack5 tmp/jetpack5
+            tar --zstd -xvf ollama-linux-arm64-jetpack5.tar.zst -C ollama-${VERSION_NO_V}/jetpack5
+            # Extract jetpack6
+            mkdir -p ollama-${VERSION_NO_V}/jetpack6 tmp/jetpack6
+            tar --zstd -xvf ollama-linux-arm64-jetpack6.tar.zst -C ollama-${VERSION_NO_V}/jetpack6
+          fi
 
       - name: Run dh_make to create packaging files
         env:
@@ -110,7 +139,12 @@ jobs:
         run: |
           tree
           cd ollama-${VERSION_NO_V}/
-          dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
+          # Add architecture suffix to package name
+          PKG_SUFFIX=""
+          if [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            PKG_SUFFIX="_arm64"
+          fi
+          dh_make --single --packagename ollama_${VERSION_NO_V_DEB}${PKG_SUFFIX} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
           cp -v ../packaging_files/* debian/
 
       - name: Build the package
@@ -126,7 +160,7 @@ jobs:
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4
         with:
-          name: deb-package
+          name: deb-package-${{ matrix.arch }}
           path: "*.deb"
 
   release-notes:
@@ -135,15 +169,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download deb artifact
+      - name: Download deb artifacts
         uses: actions/download-artifact@v4
         with:
-          name: deb-package
+          pattern: deb-package-*
+          path: .
+          merge-files: false
 
       - name: Generate CONTENTS.md
         env:
           GH_TOKEN: ${{ github.token }}
-          # Example of making use of the version variables in this job:
           VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
           VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
           VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
@@ -162,10 +197,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download deb artifact
+      - name: Download deb artifacts
         uses: actions/download-artifact@v4
         with:
-          name: deb-package
+          pattern: deb-package-*
+          path: .
+          merge-files: false
 
       - name: Download release-notes
         uses: actions/download-artifact@v4
@@ -179,7 +216,6 @@ jobs:
           body_path: CONTENTS.md
           tag_name: ${{ needs.build.outputs.VERSION_REF }}
         env:
-          # expose version metadata to this job too if needed
           VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
           VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
           VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
@@ -208,33 +244,13 @@ jobs:
         uses: dawidd6/action-send-mail@v7
         with:
           connection_url: ${{secrets.MAIL_CONNECTION}}
-          # Optional (recommended) mail server username:
-          #username: ${{secrets.MAIL_USERNAME}}
-          # Optional (recommended) mail server password:
-          #password: ${{secrets.MAIL_PASSWORD}}
-          # Required mail subject:
           subject: GitHub workflow failed in repo ${{ github.repository }}
-          # Required recipients' addresses:
           to: ${{secrets.MAIL_TO}}
-          # Required sender full name (address can be skipped):
           from: ${{secrets.MAIL_FROM}}
-          # Optional plain body:
           body: |
             Repo: ${{ github.repository }}
             Workflow: ${{ github.workflow }}
 
-          # Optional HTML body read from file:
-          #html_body: file://README.html
-
-          # Optional unsigned/invalid certificates allowance:
-          #ignore_cert: true
-          # Optional converting Markdown to HTML (set content_type to text/html too):
           convert_markdown: true
-          # Optional attachments:
-          #attachments: attachments.zip,git.diff,./dist/static/*.js
-          # Optional priority: 'high', 'normal' (default) or 'low'
-          #priority: low
-          # Optional nodemailerlog: true/false
           nodemailerlog: true
-          # Optional nodemailerdebug: true/false if true lognodem will also be set true
           nodemailerdebug: true
