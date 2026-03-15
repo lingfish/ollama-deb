@@ -29,4 +29,4 @@ jobs:
         days-before-stale: 7
         days-before-close: 7
         days-before-pr-close: -1
-        exempt-issue-labels: 'work-in-progress'
+        exempt-issue-labels: 'work in progress'
