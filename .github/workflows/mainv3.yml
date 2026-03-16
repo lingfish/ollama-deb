@@ -114,15 +114,15 @@ jobs:
           cp -v ../packaging_files/* debian/
           mv debian/control.amd64 debian/control
 
-      - name: Build the package
-        env:
-          DEB_BUILD_OPTIONS: noautodbgsym
-          DEBFULLNAME: ollama
-        run: |
-          cd ollama-${VERSION_NO_V}/
-          dpkg-buildpackage -b -us -uc
-          cd ..
-          ls -lR
+#      - name: Build the package
+#        env:
+#          DEB_BUILD_OPTIONS: noautodbgsym
+#          DEBFULLNAME: ollama
+#        run: |
+#          cd ollama-${VERSION_NO_V}/
+#          dpkg-buildpackage -b -us -uc
+#          cd ..
+#          ls -lR
 
       - name: Cleanup for doing arm64
         env:
