@@ -129,7 +129,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
         run: |
-          rm -rf ollama-${VERSION_NO_V}/tmp debian/
+          rm -rf ollama-${VERSION_NO_V}/{tmp,debian}/
 
       - name: Create skeleton and extract ollama (arm64)
         run: |
