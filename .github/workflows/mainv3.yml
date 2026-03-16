@@ -13,7 +13,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     # Expose variables computed in the 'set_version' step as job outputs so other jobs can access them via needs.build.outputs.*
     outputs:
       VERSION_REF: ${{ steps.set_version.outputs.VERSION_REF }}
@@ -156,7 +157,7 @@ jobs:
           DEBFULLNAME: ollama
         run: |
           cd ollama-${VERSION_NO_V}/
-          dpkg-buildpackage -b -us -uc -aarm64
+          dpkg-buildpackage -b -us -uc
           cd ..
           ls -lR
 
