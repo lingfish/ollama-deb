@@ -77,7 +77,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-amd64.tar.zst
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-*
 
       - name: Download ollama source
         env:
@@ -85,9 +85,9 @@ jobs:
         run: |
           gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama --archive tar.gz
 
-      - name: Download ollama rocm tarball
-        run: |
-          wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst'
+#      - name: Download ollama rocm tarball
+#        run: |
+#          wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst'
 
       - name: Create skeleton and extract ollama
         run: |
@@ -112,8 +112,42 @@ jobs:
           cd ollama-${VERSION_NO_V}/
           dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
           cp -v ../packaging_files/* debian/
+          mv debian/control.amd64 debian/control
 
       - name: Build the package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          cd ollama-${VERSION_NO_V}/
+          dpkg-buildpackage -b -us -uc
+          cd ..
+          ls -lR
+
+      - name: Cleanup for doing arm64
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          rm -rf ollama-${VERSION_NO_V}/tmp debian/
+
+      - name: Create skeleton and extract ollama (arm64)
+        run: |
+          mkdir -p ollama-${VERSION_NO_V}/tmp
+          tar --zstd -xvf ollama-linux-arm64.tar.zst -C ollama-${VERSION_NO_V}/tmp
+
+      - name: Run dh_make to create packaging files (arm64)
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          tree
+          cd ollama-${VERSION_NO_V}/
+          dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
+          cp -v ../packaging_files/* debian/
+          mv debian/control.arm64 debian/control
+
+      - name: Build the package (arm64)
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
