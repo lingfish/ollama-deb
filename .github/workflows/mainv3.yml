@@ -71,7 +71,10 @@ jobs:
       - name: Install required packages
         run: |
           sudo apt update
-          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser
+          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser bc tree
+          cd /tmp
+          wget 'https://github.com/cli/cli/releases/download/v2.88.1/gh_2.88.1_linux_amd64.tar.gz'
+          tar zxvf gh_2.88.1_linux_amd64.tar.gz -C /usr/local --strip-components 1
 
       - name: Download latest ollama
         env:
@@ -153,7 +156,7 @@ jobs:
           DEBFULLNAME: ollama
         run: |
           cd ollama-${VERSION_NO_V}/
-          dpkg-buildpackage -b -us -uc
+          dpkg-buildpackage -b -us -uc -aarm64
           cd ..
           ls -lR
 
