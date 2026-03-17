@@ -102,7 +102,7 @@ jobs:
           tar -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
       - name: Extract AMD rocm stuff
-        if: ${{ matrix.arch == "amd64" }}
+        if: matrix.arch == 'amd64'
         run: |
           mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
           tar --zstd -xvf ollama-linux-amd64-rocm.tar.zst -C ollama-${VERSION_NO_V}/tmp/rocm
