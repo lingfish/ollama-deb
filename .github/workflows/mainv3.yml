@@ -128,13 +128,6 @@ jobs:
           cd ..
           ls -lR
 
-#      - name: Cleanup for doing arm64
-#        env:
-#          DEB_BUILD_OPTIONS: noautodbgsym
-#          DEBFULLNAME: ollama
-#        run: |
-#          rm -rf ollama-${VERSION_NO_V}/{tmp,debian}/
-
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4
         with:
