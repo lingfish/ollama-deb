@@ -13,8 +13,14 @@ on:
 
 jobs:
   build:
-    #runs-on: ubuntu-latest
-    runs-on: ubuntu-22.04-arm
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            arch: amd64
+          - os: ubuntu-22.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
     # Expose variables computed in the 'set_version' step as job outputs so other jobs can access them via needs.build.outputs.*
     outputs:
       VERSION_REF: ${{ steps.set_version.outputs.VERSION_REF }}
@@ -73,9 +79,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser bc tree
-#          cd /tmp
-#          wget 'https://github.com/cli/cli/releases/download/v2.88.1/gh_2.88.1_linux_amd64.tar.gz'
-#          tar zxvf gh_2.88.1_linux_amd64.tar.gz -C /usr/local --strip-components 1
 
       - name: Download latest ollama
         env:
@@ -89,20 +92,17 @@ jobs:
         run: |
           gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama --archive tar.gz
 
-#      - name: Download ollama rocm tarball
-#        run: |
-#          wget 'https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst'
-
       - name: Create skeleton and extract ollama
         run: |
           mkdir -p ollama-${VERSION_NO_V}/tmp
-          tar --zstd -xvf ollama-linux-amd64.tar.zst -C ollama-${VERSION_NO_V}/tmp
+          tar --zstd -xvf ollama-linux-${{ matrix.arch }}.tar.zst -C ollama-${VERSION_NO_V}/tmp
 
       - name: Extract ollama docs and license
         run: |
           tar -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
 
       - name: Extract AMD rocm stuff
+        if: ${{ matrix.arch == "amd64" }}
         run: |
           mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
           tar --zstd -xvf ollama-linux-amd64-rocm.tar.zst -C ollama-${VERSION_NO_V}/tmp/rocm
@@ -116,42 +116,9 @@ jobs:
           cd ollama-${VERSION_NO_V}/
           dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
           cp -v ../packaging_files/* debian/
-          mv debian/control.amd64 debian/control
+          mv debian/control.${{ matrix.arch }} debian/control
 
-#      - name: Build the package
-#        env:
-#          DEB_BUILD_OPTIONS: noautodbgsym
-#          DEBFULLNAME: ollama
-#        run: |
-#          cd ollama-${VERSION_NO_V}/
-#          dpkg-buildpackage -b -us -uc
-#          cd ..
-#          ls -lR
-
-      - name: Cleanup for doing arm64
-        env:
-          DEB_BUILD_OPTIONS: noautodbgsym
-          DEBFULLNAME: ollama
-        run: |
-          rm -rf ollama-${VERSION_NO_V}/{tmp,debian}/
-
-      - name: Create skeleton and extract ollama (arm64)
-        run: |
-          mkdir -p ollama-${VERSION_NO_V}/tmp
-          tar --zstd -xvf ollama-linux-arm64.tar.zst -C ollama-${VERSION_NO_V}/tmp
-
-      - name: Run dh_make to create packaging files (arm64)
-        env:
-          DEB_BUILD_OPTIONS: noautodbgsym
-          DEBFULLNAME: ollama
-        run: |
-          tree
-          cd ollama-${VERSION_NO_V}/
-          dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
-          cp -v ../packaging_files/* debian/
-          mv debian/control.arm64 debian/control
-
-      - name: Build the package (arm64)
+      - name: Build the package
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
           DEBFULLNAME: ollama
@@ -160,6 +127,13 @@ jobs:
           dpkg-buildpackage -b -us -uc
           cd ..
           ls -lR
+
+#      - name: Cleanup for doing arm64
+#        env:
+#          DEB_BUILD_OPTIONS: noautodbgsym
+#          DEBFULLNAME: ollama
+#        run: |
+#          rm -rf ollama-${VERSION_NO_V}/{tmp,debian}/
 
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4
