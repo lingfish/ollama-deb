@@ -147,10 +147,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download deb artifact
+      - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: deb-package-amd64
+          merge-multiple: true
 
       - name: Generate CONTENTS.md
         env:
