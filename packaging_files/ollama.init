@@ -2,9 +2,9 @@
 ### BEGIN INIT INFO
 # Provides:          ollama
 # Required-Start:    $local_fs $network
-# Required-Stop:    $local_fs $network
-# Default-Start:    2 3 4 5
-# Default-Stop:     0 1 6
+# Required-Stop:     $local_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
 # Short-Description: Ollama Service
 # Description:       Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models.
 ### END INIT INFO
