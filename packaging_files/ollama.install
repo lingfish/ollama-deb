@@ -1,1 +1,2 @@
 tmp/bin/ollama usr/bin
+etc/init.d/ollama

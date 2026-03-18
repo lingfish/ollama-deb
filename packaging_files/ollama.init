@@ -1,0 +1,79 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          ollama
+# Required-Start:    $local_fs $network
+# Required-Stop:    $local_fs $network
+# Default-Start:    2 3 4 5
+# Default-Stop:     0 1 6
+# Short-Description: Ollama Service
+# Description:       Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models.
+### END INIT INFO
+
+NAME=ollama
+DESC="Ollama Service"
+DAEMON=/usr/bin/ollama
+PIDFILE=/var/run/ollama.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+[ -x "$DAEMON" ] || exit 0
+
+. /lib/lsb/init-functions
+
+do_start() {
+    log_daemon_msg "Starting $DESC" "$NAME"
+    start-stop-daemon --start --quiet --make-pidfile --pidfile $PIDFILE --chuid ollama:ollama --background --exec $DAEMON -- serve
+    log_end_msg $?
+}
+
+do_stop() {
+    log_daemon_msg "Stopping $DESC" "$NAME"
+    start-stop-daemon --stop --quiet --remove-pidfile --pidfile $PIDFILE --exec $DAEMON
+    log_end_msg $?
+}
+
+do_reload() {
+    log_daemon_msg "Reloading $DESC" "$NAME"
+    start-stop-daemon --stop --quiet --signal HUP --pidfile $PIDFILE --exec $DAEMON
+    log_end_msg $?
+}
+
+do_status() {
+    if [ -f "$PIDFILE" ]; then
+        PID=$(cat $PIDFILE)
+        if kill -0 $PID 2>/dev/null; then
+            echo "$NAME is running (pid $PID)"
+            exit 0
+        else
+            echo "$NAME is not running (stale pid file)"
+            exit 1
+        fi
+    else
+        echo "$NAME is not running"
+        exit 3
+    fi
+}
+
+case "$1" in
+    start)
+        do_start
+        ;;
+    stop)
+        do_stop
+        ;;
+    restart)
+        do_stop
+        do_start
+        ;;
+    reload|force-reload)
+        do_reload
+        ;;
+    status)
+        do_status
+        ;;
+    *)
+        echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload|status}"
+        exit 1
+        ;;
+esac
+
+exit 0
