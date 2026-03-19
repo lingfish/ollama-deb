@@ -10,6 +10,10 @@ on:
         description: 'Optional: version tag or ref to build (e.g. v1.2.3 or 1.2.3). If provided, this will be used instead of the push tag.'
         required: false
         default: ''
+      skip_release:
+        description: 'Skip release and repo update steps (for testing builds)'
+        required: false
+        default: 'false'
 
 jobs:
   build:
@@ -162,6 +166,7 @@ jobs:
           path: CONTENTS.md
 
   release:
+    if: ${{ !inputs.skip_release }}
     runs-on: ubuntu-latest
     needs: [build, release-notes]
     steps:
@@ -185,6 +190,7 @@ jobs:
           VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
 
   update-repo:
+    if: ${{ !inputs.skip_release }}
     needs: [build, release]
     uses: ./.github/workflows/update_repo.yml
     secrets:

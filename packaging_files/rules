@@ -18,6 +18,9 @@ export DH_VERBOSE = 1
 %:
 	dh $@ --with sysuser
 
+override_dh_installinit:
+	dh_installinit --no-start
+
 
 # dh_make generated override targets.
 # This is an example for Cmake (see <https://bugs.debian.org/641051>).
