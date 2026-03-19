@@ -14,14 +14,18 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Remove `--with systemd` flag from debhelper (incompatible with compat level 11+)
 
-### Changed
-- Update README to mention arm64 packaging
+## [0.18.0] - 2026-03-14
+### Added
+- Add arm64 architecture support
 
-## [0.18.1] - 2026-03-17
-### Changed
-- Initial packaging release (no packaging-specific changes)
+## [0.10.1] - 2025-08-01
+### Added
+- Add APT repository support
 
-## [0.17.5] - 2026-03-02
-### Changed
-- Add Buy Me a Coffee funding option
-- Add donation link and usage instructions to README
+## [0.7.1] - 2025-05-25
+### Added
+- Split shared libs into libollama-nvidia and libollama-amd packages
+
+## [0.4.6] - 2024-12-09
+### Added
+- Initial release
