@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ollama Debian Package Repository</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        :root {
+            --bg-page: #faf9f7;
+            --bg-card: #ffffff;
+            --bg-code: #f0ede8;
+            --text-primary: #3d405b;
+            --text-secondary: #6b6d7a;
+            --accent: #e07a5f;
+            --accent-hover: #d56a4f;
+            --border: #e8e5e0;
+            --shadow: rgba(61, 64, 91, 0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-page: #1a1a1a;
+                --bg-card: #252525;
+                --bg-code: #2d2d2d;
+                --text-primary: #f4f1de;
+                --text-secondary: #a8a8a8;
+                --accent: #e07a5f;
+                --accent-hover: #f08a6f;
+                --border: #3a3a3a;
+                --shadow: rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .content { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            text-decoration: underline;
+            text-underline-position: under;
+        }
+
+        p { margin-bottom: 1rem; }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        code {
+            background-color: var(--bg-code);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: var(--bg-code);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        pre code { background: none; padding: 0; font-size: 0.9rem; line-height: 1.5; }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.4rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s, background-color 0.2s;
+            color: var(--text-secondary);
+        }
+
+        pre:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { background: var(--border); color: var(--text-primary); }
+        .copy-btn.copied { color: #10b981; }
+
+        details {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            background-color: var(--bg-card);
+            transition: background-color 0.2s;
+        }
+
+        summary:hover { background-color: var(--bg-code); }
+        details > pre { margin: 0; border-radius: 0; border-top: 1px solid var(--border); }
+
+        ul, ol { margin: 1rem 0; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+
+        .markdown-alert {
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .markdown-alert p { margin-bottom: 0.5rem; }
+        .markdown-alert p:last-child { margin-bottom: 0; }
+
+        .markdown-alert-note {
+            background-color: #e8f4fd;
+            border-left: 4px solid #3498db;
+        }
+
+        .markdown-alert-tip {
+            background-color: #e8faf0;
+            border-left: 4px solid #2ecc71;
+        }
+
+        .markdown-alert-warning {
+            background-color: #fef9e7;
+            border-left: 4px solid #f39c12;
+        }
+
+        .markdown-alert-important {
+            background-color: #fef3e2;
+            border-left: 4px solid #e67e22;
+        }
+
+        .markdown-alert-caution {
+            background-color: #fdeaea;
+            border-left: 4px solid #e74c3c;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .markdown-alert-note { background-color: #1e3a5f; }
+            .markdown-alert-tip { background-color: #1a4d3a; }
+            .markdown-alert-warning { background-color: #4d3d1a; }
+            .markdown-alert-important { background-color: #4d3517; }
+            .markdown-alert-caution { background-color: #4d1a1a; }
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .container { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ollama</h1>
+            <p>Unofficial Debian package repository documentation</p>
+        </header>
+
+        <main class="content">
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The <code>sources.list</code> codename has changed from Debian distro names (like <code>bookworm</code>) to <code>stable</code>. Ollama themselves don&#39;t specify what releases/distros they support, so I&#39;ve changed to using an agnostic one too. <code>bookworm</code> will remain for a while, and then be removed.</p>
+</div>
+<h2>Overview</h2>
+<p>Setting up this repository involves three simple steps:</p>
+<ol>
+<li>Add the GPG key</li>
+<li>Add the repository source</li>
+<li>Install ollama</li>
+</ol>
+<h2>Repository setup</h2>
+<h3>Add GPG key</h3>
+<pre><code class="language-bash">curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor</code><button class="copy-btn" aria-label="Copy code" title="Copy to clipboard"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></pre><h3>Add repository</h3>
+<p>Click to expand which format you need:</p>
+<details>
+<summary>Pre deb822 file format</summary>
+
+<pre><code class="language-bash">echo &quot;deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main&quot; | sudo tee /etc/apt/sources.list.d/ollama.list</code><button class="copy-btn" aria-label="Copy code" title="Copy to clipboard"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></pre></details>
+
+<details>
+<summary>New deb822 file format</summary>
+
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt; /etc/apt/sources.list.d/ollama.sources
+Types: deb
+URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/ollama-repo.gpg
+EOF</code><button class="copy-btn" aria-label="Copy code" title="Copy to clipboard"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></pre></details>
+
+<p>Of course, you could just paste the above into your favourite editor and save as root.</p>
+<h3>Update package lists</h3>
+<pre><code class="language-bash">sudo apt update</code><button class="copy-btn" aria-label="Copy code" title="Copy to clipboard"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></pre><div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The repo URL looks a bit unusual. See <a href="https://github.com/lingfish/ollama-deb/issues/5">here</a> for details.
+This URL points to a Cloudflare worker. I do this in my free time, and I&#39;m not willing to pay for hosting the (abnormally-large) package files.</p>
+</div>
+<h2>Package installation</h2>
+<p>Install ollama directly from the repository:</p>
+<pre><code class="language-bash">sudo apt install ollama</code><button class="copy-btn" aria-label="Copy code" title="Copy to clipboard"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></pre><div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title"><svg class="octicon octicon-alert mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>The first GPU package that this <code>ollama</code> package recommends is <code>libollama-nvidia</code>, and so if none are requested, this will be installed by default. If you don&#39;t need any GPU support, remove it afterwards, or add <code>--no-install-recommends</code> to your <code>apt</code> command.</p>
+</div>
+<p>To use a GPU, you&#39;ll also need one of the following packages, depending on your GPU make:</p>
+<ul>
+<li><code>libollama-nvidia</code> (installed by default)</li>
+<li><code>libollama-amd</code></li>
+</ul>
+<h2>Other notes</h2>
+<h3>APT pinning</h3>
+<p>If you don&#39;t want release candidates and only &quot;stable&quot; versions, add the following to, say, <code>/etc/apt/preferences.d/ollama</code>:</p>
+<pre><code>Package: /./
+Pin: origin ollama-repo.jason-9eb.workers.dev
+Pin: version /rc/
+Pin-Priority: -1</code><button class="copy-btn" aria-label="Copy code" title="Copy to clipboard"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></pre><p>And then just do the usual <code>apt update</code>.</p>
+<h3>The Cloudflare worker</h3>
+<p>Due to the way APT repos work, and how hosting companies cost money, I came up with a novel way to &quot;host&quot; the repo.</p>
+<p>The repo is hosted on a Cloudflare R2 bucket — but only the repo skeleton files, not the (massive) deb files.</p>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p>When APT requests a package file, the Cloudflare worker redirects the request to a GitHub Releases download URL. This keeps hosting costs minimal while still serving the actual package files from GitHub&#39;s infrastructure.</p>
+</div>
+<p>This is the code for the Cloudflare worker:</p>
+<pre><code class="language-javascript">export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const key = decodeURIComponent(url.pathname.slice(1));
+
+    switch (request.method) {
+      case &quot;GET&quot;:
+        if (key.includes(&quot;apt/pool/main/o/ollama/&quot;)) {
+          const filename = key.split('/').pop()
+          const githubFormattedFilename = filename.replace('~', '-').replace('-rc', '.rc')
+          const newUrl = `https://github.com/lingfish/ollama-deb/releases/download/v${githubFormattedFilename.replace(/^[^_]*_/, '').replace('_amd64.deb', '').replace('.rc', '-rc')}/` + githubFormattedFilename
+          return Response.redirect(newUrl, 302);
+        }
+        const object = await env.MY_BUCKET.get(key);
+
+        if (object === null) {
+          return new Response(&quot;Object Not Found&quot;, { status: 404 });
+        }
+
+        const headers = new Headers();
+        object.writeHttpMetadata(headers);
+        headers.set(&quot;etag&quot;, object.httpEtag);
+
+        return new Response(object.body, { headers });
+
+      default:
+        return new Response(&quot;Method Not Allowed&quot;, {
+          status: 405,
+          headers: { Allow: &quot;GET&quot; },
+        });
+    }
+  },
+};</code><button class="copy-btn" aria-label="Copy code" title="Copy to clipboard"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></pre>
+        </main>
+
+        <footer>
+            <p>Unofficial Debian package repository</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+
+            document.querySelectorAll('.copy-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const pre = btn.closest('pre');
+                    const code = pre.querySelector('code');
+                    const text = code.textContent;
+
+                    navigator.clipboard.writeText(text).then(function() {
+                        btn.classList.add('copied');
+                        btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+                        setTimeout(function() {
+                            btn.classList.remove('copied');
+                            btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
