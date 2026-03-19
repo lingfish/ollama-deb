@@ -30,17 +30,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
 
-      - name: Install Node stuff
+      - name: Install and build
         run: |
           cd debian-repo
           npm install
-          ls -l
-
-      - name: Run 11ty
-        run: |
-          cd debian-repo
-          npx @11ty/eleventy --pathprefix=/ollama-deb/
-          ls -l
+          npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -5,6 +5,11 @@ import { Marked } from "marked";
 import markedAlert from "marked-alert";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const outputDir = path.join(__dirname, "_site");
+
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir, { recursive: true });
+}
 
 const markedInstance = new Marked(
   markedAlert()
@@ -306,7 +311,7 @@ function processMarkdown(content) {
 }
 
 const inputPath = path.join(__dirname, "index.md");
-const outputPath = path.join(__dirname, "index.html");
+const outputPath = path.join(__dirname, "_site", "index.html");
 
 const markdownContent = fs.readFileSync(inputPath, "utf-8");
 const { frontmatter, content: markdown } = processMarkdown(markdownContent);
