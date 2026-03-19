@@ -4,6 +4,9 @@
 
 This is a GitHub workflow to build Debian packages of [ollama](https://github.com/ollama/ollama/) based on tags.
 
+It installs the same files as the binary tarballs that you can download from
+[their releases page](https://github.com/ollama/ollama/releases), plus more.
+
 It will also install, enable and start a service (systemd on systemd systems, init.d on sysvinit/OpenRC), as well as add a system user to run ollama. It also adds the
 source documentation.
 
