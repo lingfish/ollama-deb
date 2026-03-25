@@ -166,7 +166,7 @@ jobs:
           path: CONTENTS.md
 
   release:
-    if: ${{ !inputs.skip_release }}
+    if: ${{ inputs.skip_release != 'true' }}
     runs-on: ubuntu-latest
     needs: [build, release-notes]
     steps:
@@ -190,7 +190,7 @@ jobs:
           VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
 
   update-repo:
-    if: ${{ !inputs.skip_release }}
+    if: ${{ inputs.skip_release != 'true' }}
     needs: [build, release]
     uses: ./.github/workflows/update_repo.yml
     secrets:
