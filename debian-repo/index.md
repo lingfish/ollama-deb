@@ -30,7 +30,7 @@ Click to expand which format you need:
 <summary>Pre deb822 file format</summary>
 
 ```bash
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list
 ```
 
 </details>
@@ -44,7 +44,7 @@ Types: deb
 URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
 Suites: stable
 Components: main
-Architectures: amd64
+Architectures: $(dpkg --print-architecture)
 Signed-By: /etc/apt/keyrings/ollama-repo.gpg
 EOF
 ```
