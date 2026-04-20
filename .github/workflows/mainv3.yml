@@ -132,6 +132,19 @@ jobs:
           cd ..
           ls -lR
 
+      - name: Split large packages
+        run: |
+          sudo apt-get install -y dpkg
+          for deb in *.deb; do
+            size=$(stat -c%s "$deb")
+            # Split if > 1GB
+            if [ $size -gt 1000000000 ]; then
+              dpkg-split -S 1000000 -s "$deb"
+              rm "$deb"
+            fi
+          done
+          ls -l
+
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4
         with:

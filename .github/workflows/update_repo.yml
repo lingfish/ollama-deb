@@ -67,7 +67,7 @@ jobs:
       - name: Install reprepro
         run: |
           sudo apt-get update
-          sudo apt-get install -y reprepro tree
+          sudo apt-get install -y reprepro tree dpkg
           reprepro --version
 
       - name: Create dirs if needed
