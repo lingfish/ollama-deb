@@ -18,10 +18,6 @@ env
 
 # Per-package dpkg -I info
 for f in *.deb; do
-  # Skip split packages (.NofM.deb)
-  if [[ "$f" == *"of"* ]]; then
-    continue
-  fi
   {
     echo "### $f"
     echo '```'
@@ -29,15 +25,6 @@ for f in *.deb; do
     echo '```'
   } >> "$OUTPUT"
 done
-
-#for f in *.deb; do
-#  {
-#    echo "### $f"
-#    echo '```'
-#    dpkg -I "$f"
-#    echo '```'
-#  } >> "$OUTPUT"
-#done
 
 # This is disabled due to the GitHub API rejecting large payloads
 # Per-package file listing
