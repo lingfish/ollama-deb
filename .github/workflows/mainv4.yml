@@ -1,0 +1,342 @@
+name: Build new release v4
+# This edition goes back to using S3 buckets for everything, because ollama started pushing massive >2GB files
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Optional: version tag or ref to build (e.g. v1.2.3 or 1.2.3). If provided, this will be used instead of the push tag.'
+        required: false
+        default: ''
+      skip_release:
+        description: 'Skip release and repo update steps (for testing builds)'
+        required: false
+        default: 'true'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            arch: amd64
+          - os: ubuntu-22.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    # Expose variables computed in the 'set_version' step as job outputs so other jobs can access them via needs.build.outputs.*
+    outputs:
+      VERSION_REF: ${{ steps.set_version.outputs.VERSION_REF }}
+      VERSION_NO_V: ${{ steps.set_version.outputs.VERSION_NO_V }}
+      VERSION_NO_V_DEB: ${{ steps.set_version.outputs.VERSION_NO_V_DEB }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine version to use (manual input overrides ref)
+        id: set_version
+        run: |
+          # If run manually and an input 'version' was provided, use it.
+          # Otherwise fall back to GITHUB_REF_NAME (the tag when triggered by push).
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION_REF="${{ github.event.inputs.version }}"
+          else
+            VERSION_REF="${GITHUB_REF_NAME}"
+          fi
+
+          # Strip leading 'v' for numeric version and convert -rc to ~rc for deb packages.
+          VERSION_NO_V="${VERSION_REF#v}"
+          VERSION_NO_V_DEB="${VERSION_NO_V/-rc/~rc}"
+
+          # Make variables available to other steps in this job
+          echo "VERSION_REF=$VERSION_REF" >> $GITHUB_ENV
+          echo "VERSION_NO_V=$VERSION_NO_V" >> $GITHUB_ENV
+          echo "VERSION_NO_V_DEB=$VERSION_NO_V_DEB" >> $GITHUB_ENV
+
+          # Also expose variables as step outputs so they can be mapped to job outputs
+          # and consumed by other jobs via needs.build.outputs.*
+          echo "VERSION_REF=$VERSION_REF" >> $GITHUB_OUTPUT
+          echo "VERSION_NO_V=$VERSION_NO_V" >> $GITHUB_OUTPUT
+          echo "VERSION_NO_V_DEB=$VERSION_NO_V_DEB" >> $GITHUB_OUTPUT
+
+          echo "Using VERSION_REF=$VERSION_REF"
+          echo "Using VERSION_NO_V=$VERSION_NO_V"
+          echo "Using VERSION_NO_V_DEB=$VERSION_NO_V_DEB"
+
+      - name: Speed up dpkg a bit
+        run: |
+          sudo bash -c 'echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io'
+
+      - name: Free Disk Space
+        uses: endersonmenezes/free-disk-space@v3  # Use @main for latest, @v3 for stable
+        with:
+          remove_android: true
+          remove_dotnet: true
+          remove_haskell: true
+          remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+          remove_packages_one_command: true
+          remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /usr/local/aws-sam-cli /usr/share/gradle"
+          rm_cmd: "rmz"  # Use 'rmz' for faster deletion (default: 'rm')
+          testing: false
+          
+      - name: Install required packages
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends dh-make curl build-essential ca-certificates dh-sysuser bc tree
+
+      - name: Download latest ollama
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama -p ollama-linux-*
+
+      - name: Download ollama source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download ${VERSION_REF} --repo https://github.com/ollama/ollama --archive tar.gz
+
+      - name: Create skeleton and extract ollama
+        run: |
+          mkdir -p ollama-${VERSION_NO_V}/tmp
+          tar --zstd -xvf ollama-linux-${{ matrix.arch }}.tar.zst -C ollama-${VERSION_NO_V}/tmp
+
+      - name: Extract ollama docs and license
+        run: |
+          tar -zxvf ollama-${VERSION_NO_V}.tar.gz ollama-${VERSION_NO_V}/docs ollama-${VERSION_NO_V}/LICENSE
+
+      - name: Extract AMD rocm stuff
+        if: matrix.arch == 'amd64'
+        run: |
+          mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
+          tar --zstd -xvf ollama-linux-amd64-rocm.tar.zst -C ollama-${VERSION_NO_V}/tmp/rocm
+
+      - name: Run dh_make to create packaging files
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          tree
+          cd ollama-${VERSION_NO_V}/
+          dh_make --single --packagename ollama_${VERSION_NO_V_DEB} --copyright custom --copyrightfile ../LICENSE --email ollama@ollama.com --native --yes
+          cp -v ../packaging_files/* debian/
+          mv debian/control.${{ matrix.arch }} debian/control
+
+      - name: Build the package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+          DEBFULLNAME: ollama
+        run: |
+          cd ollama-${VERSION_NO_V}/
+          dpkg-buildpackage -b -us -uc
+          cd ..
+          ls -lR
+
+      - name: Upload deb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-package-${{ matrix.arch }}
+          path: "*.deb"
+
+#  release-notes:
+#    runs-on: ubuntu-latest
+#    needs: build
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          merge-multiple: true
+#
+#      - name: Generate CONTENTS.md
+#        env:
+#          GH_TOKEN: ${{ github.token }}
+#          # Example of making use of the version variables in this job:
+#          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
+#          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
+#          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
+#        run: |
+#          ./generate_contents_md.sh
+#
+#      - name: Upload release-notes
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: release-notes-md
+#          path: CONTENTS.md
+
+#  release:
+#    if: ${{ inputs.skip_release != 'true' }}
+#    runs-on: ubuntu-latest
+#    needs: [build, release-notes]
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          merge-multiple: true
+#
+#      - name: Release
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          files: "*.deb"
+#          body_path: CONTENTS.md
+#          tag_name: ${{ needs.build.outputs.VERSION_REF }}
+#        env:
+#          # expose version metadata to this job too if needed
+#          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
+#          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
+#          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
+
+
+  update-repo:
+    needs: [build]
+    runs-on: ubuntu-latest
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+    with:
+      VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
+      VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
+      VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
+    steps:
+      - name: Set version env from inputs
+        run: |
+          echo "VERSION_REF=${{ inputs.VERSION_REF }}" >> $GITHUB_ENV
+          echo "VERSION_NO_V=${{ inputs.VERSION_NO_V }}" >> $GITHUB_ENV
+          echo "VERSION_NO_V_DEB=${{ inputs.VERSION_NO_V_DEB }}" >> $GITHUB_ENV
+          
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Install repo for newer reprepro
+        uses: gerlero/add-apt-repository@v1
+        with:
+          uri: https://raw.githubusercontent.com/Aetherinox/proteus-apt-repo/main
+          key: https://github.com/Aetherinox.gpg
+
+      - name: Install reprepro
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y reprepro tree
+          reprepro --version
+
+      - name: Create dirs if needed
+        run: |
+          mkdir -p debian-repo/{apt,deb,reprepro/{conf,db}}
+          mkdir -p debian-repo/deb/stable
+          tree
+
+#      - name: Download latest release or specified tag
+#        env:
+#          GH_TOKEN: ${{ github.token }}
+#          RELEASE_TAG: ${{ github.event.inputs.release_tag }}
+#        run: |
+#          cd debian-repo/deb/stable
+#          echo "Downloading tag ${RELEASE_TAG:-$VERSION_REF}..."
+#          gh release download "${RELEASE_TAG:-$VERSION_REF}" --pattern '*.deb'
+#          cd -
+#          tree
+
+      - name: Run reprepro
+        run: |
+          cd debian-repo
+          current=`pwd`
+          reprepro=$current/reprepro
+          echo $current
+          echo $reprepro
+          cd apt
+          reprepro --dbdir $reprepro/db --confdir $reprepro/conf translatelegacyreferences
+          for codename in bookworm stable
+          do
+            reprepro -V --dbdir $reprepro/db --confdir $reprepro/conf -C main includedeb $codename $current/deb/stable/*deb
+            #cat dists/$codename/Release | gpg -s --default-key 1C9E802275991A570F4BDBEB91A978214AE92757 -abs > dists/$codename/Release.gpg
+          done
+          cd $current
+          tree
+          rm -rf $current/deb
+          #rm -rf $current/apt/pool
+          tree
+
+      - name: Checkin new stuff
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          tree
+          git add debian-repo/reprepro
+          git commit -m "Update ollama to ${RELEASE_TAG:-$VERSION_REF}"
+          git push
+
+      - name: Push to R2
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: debian-repo
+          destination-dir: ./
+
+
+
+
+
+
+  email:
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    needs: [build, update-repo]
+    steps:
+      - name: Send email
+        uses: dawidd6/action-send-mail@v7
+        with:
+          connection_url: ${{secrets.MAIL_CONNECTION}}
+          # Optional (recommended) mail server username:
+          #username: ${{secrets.MAIL_USERNAME}}
+          # Optional (recommended) mail server password:
+          #password: ${{secrets.MAIL_PASSWORD}}
+          # Required mail subject:
+          subject: GitHub workflow failed in repo ${{ github.repository }}
+          # Required recipients' addresses:
+          to: ${{secrets.MAIL_TO}}
+          # Required sender full name (address can be skipped):
+          from: ${{secrets.MAIL_FROM}}
+          # Optional plain body:
+          body: |
+            Repo: ${{ github.repository }}
+            Workflow: ${{ github.workflow }}
+
+          # Optional HTML body read from file:
+          #html_body: file://README.html
+
+          # Optional unsigned/invalid certificates allowance:
+          #ignore_cert: true
+          # Optional converting Markdown to HTML (set content_type to text/html too):
+          convert_markdown: true
+          # Optional attachments:
+          #attachments: attachments.zip,git.diff,./dist/static/*.js
+          # Optional priority: 'high', 'normal' (default) or 'low'
+          #priority: low
+          # Optional nodemailerlog: true/false
+          nodemailerlog: true
+          # Optional nodemailerdebug: true/false if true lognodem will also be set true
+          nodemailerdebug: true
