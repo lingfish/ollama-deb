@@ -103,7 +103,7 @@ jobs:
           cd $current
           tree
           rm -rf $current/deb
-          rm -rf $current/apt/pool
+          #rm -rf $current/apt/pool
           tree
 
       - name: Checkin new stuff
