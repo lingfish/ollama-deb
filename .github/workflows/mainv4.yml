@@ -194,10 +194,6 @@ jobs:
   update-repo:
     needs: [build]
     runs-on: ubuntu-latest
-    with:
-      VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
-      VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
-      VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
     steps:
       - name: Set version env from inputs
         run: |
