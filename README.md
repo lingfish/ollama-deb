@@ -4,6 +4,8 @@
 > ### Builds are broken!
 > As of 20 April, 2026, builds (and hence packages) are broken. This is due to the ollama team now pushing builds (specifically nvidia libraries) that are greater than 2GB in size,
 > which breaks GitHub release upload limits. I'm trying a few solutions, but finding nothing promising yet.
+>
+> If anyone can offer free hosting of the repo files, please get in touch via an [issue](https://github.com/lingfish/ollama-deb/issues).
 
 ![GitHub Release](https://img.shields.io/github/v/release/lingfish/ollama-deb)
 
