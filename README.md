@@ -1,5 +1,10 @@
 # ollama-deb
 
+> [!CAUTION]
+> ### Builds are broken!
+> As of 20 April, 2026, builds (and hence packages) are broken. This is due to the ollama team now pushing builds (specifically nvidia libraries) that are greater than 2GB in size,
+> which breaks GitHub release upload limits. I'm trying a few solutions, but finding nothing promising yet.
+
 ![GitHub Release](https://img.shields.io/github/v/release/lingfish/ollama-deb)
 
 This is a GitHub workflow to build Debian packages of [ollama](https://github.com/ollama/ollama/) based on tags.
