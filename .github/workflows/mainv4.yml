@@ -14,7 +14,7 @@ on:
       skip_release:
         description: 'Skip release and repo update steps (for testing builds)'
         required: false
-        default: 'true'
+        default: 'false'
 
 jobs:
   build:
@@ -139,56 +139,56 @@ jobs:
           name: deb-package-${{ matrix.arch }}
           path: "*.deb"
 
-#  release-notes:
-#    runs-on: ubuntu-latest
-#    needs: build
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v4
-#        with:
-#          merge-multiple: true
-#
-#      - name: Generate CONTENTS.md
-#        env:
-#          GH_TOKEN: ${{ github.token }}
-#          # Example of making use of the version variables in this job:
-#          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
-#          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
-#          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
-#        run: |
-#          ./generate_contents_md.sh
-#
-#      - name: Upload release-notes
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: release-notes-md
-#          path: CONTENTS.md
+  release-notes:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
 
-#  release:
-#    if: ${{ inputs.skip_release != 'true' }}
-#    runs-on: ubuntu-latest
-#    needs: [build, release-notes]
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v4
-#        with:
-#          merge-multiple: true
-#
-#      - name: Release
-#        uses: softprops/action-gh-release@v2
-#        with:
-#          files: "*.deb"
-#          body_path: CONTENTS.md
-#          tag_name: ${{ needs.build.outputs.VERSION_REF }}
-#        env:
-#          # expose version metadata to this job too if needed
-#          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
-#          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
-#          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Generate CONTENTS.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Example of making use of the version variables in this job:
+          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
+          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
+          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
+        run: |
+          ./generate_contents_md.sh
+
+      - name: Upload release-notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes-md
+          path: CONTENTS.md
+
+  release:
+    if: ${{ inputs.skip_release != 'true' }}
+    runs-on: ubuntu-latest
+    needs: [build, release-notes]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-notes-md
+          merge-multiple: true
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: CONTENTS.md
+          tag_name: ${{ needs.build.outputs.VERSION_REF }}
+        env:
+          # expose version metadata to this job too if needed
+          VERSION_REF: ${{ needs.build.outputs.VERSION_REF }}
+          VERSION_NO_V: ${{ needs.build.outputs.VERSION_NO_V }}
+          VERSION_NO_V_DEB: ${{ needs.build.outputs.VERSION_NO_V_DEB }}
 
 
   update-repo:
@@ -284,16 +284,12 @@ jobs:
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: debian-repo
           destination-dir: ./
-
-
-
-
-
+          keep-file-fresh: true
 
   email:
     if: ${{ failure() }}
     runs-on: ubuntu-latest
-    needs: [build, update-repo]
+    needs: [build, update-repo, release-notes, release]
     steps:
       - name: Send email
         uses: dawidd6/action-send-mail@v7
