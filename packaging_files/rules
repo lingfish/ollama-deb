@@ -3,6 +3,7 @@
 # See debhelper(7) (uncomment to enable).
 # Output every command that modifies files on the build system.
 export DH_VERBOSE = 1
+export XZ_OPT=-v
 
 
 # See FEATURE AREAS in dpkg-buildflags(1).
@@ -35,4 +36,4 @@ override_dh_shlibdeps:
 	dh_shlibdeps -Xlib/ollama
 
 override_dh_builddeb:
-	dh_builddeb -- -Znone
+	dh_builddeb -- -Z xz -z 2
