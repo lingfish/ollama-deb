@@ -1,0 +1,5 @@
+Archive: stable
+Component: main
+Origin: lingfish
+Architecture: arm64
+Description: APT repository for ollama packages

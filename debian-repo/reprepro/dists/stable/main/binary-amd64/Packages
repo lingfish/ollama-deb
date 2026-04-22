@@ -1,0 +1,402 @@
+Package: libollama-amd
+Source: ollama
+Version: 0.21.0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2544292
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.21.0_amd64.deb
+Size: 1025733680
+SHA512: b3e8212854b37c6ab6ffb49f7bc1d7001948b631e0bd534483a2a5cfe15c917390d73ea0979f991dd47009ceb0e7f8f6ab02dc979a9429c21686cc8be63386a3
+SHA256: 62d33bb49dfcf09203b948cc42f63bd1cb2232008f164cd012fa8c4d91853a48
+SHA1: 3b84d1eb666c3d23c9bf1b001b5c991dbb1a4a83
+MD5sum: c0e919189e259e981f8614329055f5be
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-amd
+Source: ollama
+Version: 0.20.8~rc0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2544292
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.20.8~rc0_amd64.deb
+Size: 1025732780
+SHA512: 3d243d969ce93805d9f6b5917dfa54c41cdc6ce80e48ae8c33daed6a285a933dbbdc35b25900f27600848f2eb597ecbdb2d2912fcac363db4ef89b5f3da01398
+SHA256: bd8623165f82eb9c4d4c35efa2cfed5f03653216d30b3807a7cb9ebab7ea39cb
+SHA1: 5de94cf37aaef3fc02a2f22f368c97ccc7e732c6
+MD5sum: 05524f0dedb9101cc4e0be60242628f8
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-amd
+Source: ollama
+Version: 0.20.6
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2614718
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.20.6_amd64.deb
+Size: 1079014508
+SHA512: 5de5c2c8a5d7f681ce98c0de57a391393c86bd6c86a26dfe8c332819b6f58ff3a4f2bce9d9ebbb28b072a19465c3caf8a7066715ee5fccba39190bd6b2beb977
+SHA256: ed91a1906dee7027c33371b8c5eb423bb207a711a7bc6821c33ce12b4e4be4ae
+SHA1: a658ee98690f650051520e0014bbead198f2c10d
+MD5sum: c5129e4bf1b19384c89053d608c72bee
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-amd
+Source: ollama
+Version: 0.20.6~rc1
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2614718
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.20.6~rc1_amd64.deb
+Size: 1079014050
+SHA512: 2facd43995090a71cb1087c303cae3446d3ddaf3097f07fc294631636c92344612de5e6829bf4a5adbb8e8340deb589da97ca8eb76e8e42db3db9c1b13d61398
+SHA256: 9f7ad9d2476b7d166e87611a4764310e5ac7dc6895375f5645b61d5dfa0bcdac
+SHA1: bb3678bccdbc39f64ce23c04de13c428778d1162
+MD5sum: f053ea621902849ec3b41c2a76ab7b84
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-amd
+Source: ollama
+Version: 0.20.6~rc0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2614718
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.20.6~rc0_amd64.deb
+Size: 1079014570
+SHA512: 29592a11260e3c1596b9a4866f7990f22fa80372d780d1c2cccaa072dc77867bffc87651e9b743831f17f6f01bdf403de0e4af6fe52d144aa91ee1fe8724b8b5
+SHA256: d28c9625eb8c399ee6cdbd58a3c8df9668a84344008ca463e1730a0efa6e9100
+SHA1: 36fe76354efbc52b56bab9751f2f07d7929b7897
+MD5sum: 1dd9484d23af28e6bb4a95e787a40000
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-amd
+Source: ollama
+Version: 0.20.5
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2614718
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.20.5_amd64.deb
+Size: 1079013356
+SHA512: 6eb70b18046a5c85970bda58673875fa59c4beec59a1e8587d332d8b66a571d70a619d729ca30e8e91cc7a9aa34c0fe11883f1ddd13033ba7eca3c41f4e27a7c
+SHA256: 14686481b5edafa0edb8dc57f8cc7bf3881a9734aefdfe59e6359ad8884e311e
+SHA1: 1e6cb9d8c776146d340e97b2e99d48198d0d0743
+MD5sum: c5fb21bba4cc32cb0b37ef68506075d7
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-amd
+Source: ollama
+Version: 0.20.5~rc2
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 2614718
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-amd_0.20.5~rc2_amd64.deb
+Size: 1079014024
+SHA512: 736d84393fd54239728783b8183c033e301a9e87673c43d03a8aab03cb72b3e491ccc6c435b68871a1605b2ed5cc429b20b49f18a22ff561a4456cd6ff72ac5f
+SHA256: 4883c53c5e47cac849ed7f62889811a33fb3dd85c52fcbc9bfe86e4dc9fdb290
+SHA1: 658a236cf89eed4a88bf43b32b9fa4ddd068e976
+MD5sum: 87ab427972f1979a7c74a02e50ad6e46
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for AMD.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.21.0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 5091888
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.21.0_amd64.deb
+Size: 2149652200
+SHA512: 7a34e8a4753cae1eab1819a8812008ecdbb158ddd9610c38f3b55127981cd481ff70c0499ad0bcb891b98ea8292e80816afb050ef93fa90d1f53038ad5221d3a
+SHA256: 30321595b0925bf2ef1487f1ac60cb10663a7b869a4773c9120aebb193ee8e95
+SHA1: 41722e7b91050f97b4838238b5512e6e3a96efb4
+MD5sum: 5b39e935858ef75eb18a2a1a688b26f6
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.20.8~rc0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 4968449
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.20.8~rc0_amd64.deb
+Size: 2111532860
+SHA512: 581d28b15e7a4bbe9d1ad838e8687e80e66a8774627c7258a8fb56486f640793ad57284ac41a4f67482cc1c674384e580c900468f769f4db16ba29acaedb4e38
+SHA256: 3d9f663987301746d7515568845d2ef5357665ae4ba5e7c3711b4e304d7279fa
+SHA1: 7e1bf7770bf7a3a897797bca088be0d332f59c17
+MD5sum: bf4e53c5dc04acd99cf16c3686670733
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.20.6
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 4968468
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.20.6_amd64.deb
+Size: 2110416572
+SHA512: 4ac42bfc2a528dc780997a2bb1bb5ed2dc756e72512fdf58bcc1b32adfb7ce21f57fc1dd6faee7c6c5b6ba6ba766157792f7de2d6cad2646b9d261029ebf1d34
+SHA256: b04d424389b4414a93f0af1992f2d43294b50d702a9d0f1cd6ea4100eb21d34d
+SHA1: 945fe5f8d0cb6ff7b7ed9e9fa5f58a0a01a00e39
+MD5sum: 627c21e271f016cb5f6d0bcc853e428f
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.20.6~rc1
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 4968457
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.20.6~rc1_amd64.deb
+Size: 2112586926
+SHA512: b9b6ac1fa8e2da170b2054504f12baa15f417b88154698e706e515f3a19498e1961afe2e9fc6b22743bbb614fd18416b095444b04ac4da45dce70960e2f78e8d
+SHA256: 79a5988c59a6d595c8b12f74b9c9d0ed74692c36072247092d6abffe021dab4c
+SHA1: 32e1cb4ccdb06ec3a62880976efa151052195e3a
+MD5sum: fcf0b0b00d0fe87948ed2f801830bfb3
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.20.6~rc0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 4968433
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.20.6~rc0_amd64.deb
+Size: 2113745104
+SHA512: 06c3fcb884999d1d8335c24610de1523b0d19fe29d30df532b07463e81a9f0174d752934d5d5561e7eea9a0938b3a13d750d4e5aca03d2c204369193607b761a
+SHA256: ae3f6b7772a4708e180531454d3ea793247c97861536e07f663071cf1949d035
+SHA1: 2debe67f3ab665f9eb1e072307ba290cea85b47e
+MD5sum: daabd53ac3a5e1196a8a57d2ca5b4022
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.20.5
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 4968516
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.20.5_amd64.deb
+Size: 2112185180
+SHA512: 5e466621c17b8ab3847acd6eadba10797e14e422607ce878384fa44b3caf9153d3252f55c3f2abad5fc3035abf3028a73f9c0a2f0224f29c391cfe563e7d3864
+SHA256: 67abd951a2c9d0924c76156463d24c2f5e423b02df8a74a2db656bcbc9d747f4
+SHA1: d143a8e368cde21a1d6da642107454386cf1dedd
+MD5sum: c4f78e873dac2209bc7f8d7f39827e6b
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: libollama-nvidia
+Source: ollama
+Version: 0.20.5~rc2
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 4968429
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: libs
+Filename: pool/main/o/ollama/libollama-nvidia_0.20.5~rc2_amd64.deb
+Size: 2111742420
+SHA512: 23ed31814a8a6d18070ee284ac27f55747166b8d9c10a55eb3199d352893a880e0df829f184187b1fa6f7b74be117aa7d5f9a9d42a182e786346c681736bc12a
+SHA256: 69f6ae98367993b7ae1b99a505b1db72b1c1abd01b5aa2b37c28b8ecdfb15007
+SHA1: 31d1d0c380c2321ee521185aeb08d6a5efda4bd2
+MD5sum: 6993fc3941d5ad018c06164c6a26ff35
+Description: Shared libraries for ollama
+ This package contains the shared libraries used by ollama for NVIDIA.
+
+Package: ollama
+Version: 0.20.8~rc0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 56354
+Depends: libc6 (>= 2.28), libgcc-s1 (>= 3.4), libstdc++6 (>= 10.2), sysuser-helper (<< 2.0)
+Recommends: libollama-nvidia | libollama-amd
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: golang
+Filename: pool/main/o/ollama/ollama_0.20.8~rc0_amd64.deb
+Size: 26019812
+SHA512: 2f8a24bca4a97515f93d76e3975fce9054d6d234ee1ec22d755a9e3bff2a85f8d5bd9657a907a61e27036619b4734baab37db7453289688b313a24e92c65e62f
+SHA256: cfacecddf9fdbe4f01a68806c971d929f0ddebb75c92f5a0680dd97ce90db70d
+SHA1: a90ca724a5518f4fa4fbe12edbb2f6d8c2305464
+MD5sum: bec00b58d762a074efcb687a9706b11b
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
+ .
+ One of the recommended packages should/will enable GPU support.
+
+Package: ollama
+Version: 0.20.6
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 56250
+Depends: libc6 (>= 2.28), libgcc-s1 (>= 3.4), libstdc++6 (>= 10.2), sysuser-helper (<< 2.0)
+Recommends: libollama-nvidia | libollama-amd
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: golang
+Filename: pool/main/o/ollama/ollama_0.20.6_amd64.deb
+Size: 25988872
+SHA512: b89d1b5ec5d3a2b2404a58447fe5b73ba74637a580a247167de6372254e63699539913c8bcde90ea9cca6fc16519a5bdb8c10b5cbe6476833455b66744dc6e1d
+SHA256: 0526dcda6569a265f0f64616e48357e6e9b6fd8e8c6becb5e7fd2803e3d4a206
+SHA1: 46de5f82e690fd12e34003e145a128d257355a15
+MD5sum: 9c019e932a84de6fc847d15a8244dd63
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
+ .
+ One of the recommended packages should/will enable GPU support.
+
+Package: ollama
+Version: 0.20.6~rc1
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 56250
+Depends: libc6 (>= 2.28), libgcc-s1 (>= 3.4), libstdc++6 (>= 10.2), sysuser-helper (<< 2.0)
+Recommends: libollama-nvidia | libollama-amd
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: golang
+Filename: pool/main/o/ollama/ollama_0.20.6~rc1_amd64.deb
+Size: 25988868
+SHA512: d2afad385b2f0fcf40d71ba84777da10df5727fd07e60b2c138dbaee8f2b9abee863a71677d6f072cecc199330e9bb135ad0cb4bd12cdc2a37fac480c48e5f65
+SHA256: eed0ac15132e9209bae98b858d7dc2930a37d3430a2f77da259ad2eda6c4600b
+SHA1: 9a17b1c58ee3d6d074804080deb5d1f61e57540c
+MD5sum: 973793104820d48457c492b8dd69fce9
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
+ .
+ One of the recommended packages should/will enable GPU support.
+
+Package: ollama
+Version: 0.20.6~rc0
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 56246
+Depends: libc6 (>= 2.28), libgcc-s1 (>= 3.4), libstdc++6 (>= 10.2), sysuser-helper (<< 2.0)
+Recommends: libollama-nvidia | libollama-amd
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: golang
+Filename: pool/main/o/ollama/ollama_0.20.6~rc0_amd64.deb
+Size: 25991714
+SHA512: 0b5a3b435bf8d703289aa6cff324f525bf8e01bcf8ee6749b09a91ba98f810614f70c67a8788f36d8f52e5f9dc33e199b873368800cda54f0ee31afbcb2742ce
+SHA256: 02e152ec5aa6e89f11d980391a5195108ef63081a1c2beae43378cbd2e968ef0
+SHA1: 5657936be7d73e15692273c94a40aa706c10d5a3
+MD5sum: 41c9a90e3ef8c44a58c5b5c11ba50b04
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
+ .
+ One of the recommended packages should/will enable GPU support.
+
+Package: ollama
+Version: 0.20.5
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 56211
+Depends: libc6 (>= 2.28), libgcc-s1 (>= 3.4), libstdc++6 (>= 10.2), sysuser-helper (<< 2.0)
+Recommends: libollama-nvidia | libollama-amd
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: golang
+Filename: pool/main/o/ollama/ollama_0.20.5_amd64.deb
+Size: 25974398
+SHA512: c8ff8ae7e4b2c7c2126d413495e4ad25c0de563e05b4189fe9e1ea84c55c3c06232ca541ee6cfb3d2c55efec3dbccad06d23f87556c6f5291a1a48e7e0dd749f
+SHA256: 1e9b60d073978991b968ab122093669d64e70b838eb38996125d86a7384a6798
+SHA1: 2cd85944d0fc10356555fb41912224d3e93ef5b4
+MD5sum: 06e5b076becfade31f27697e4d83f2e8
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
+ .
+ One of the recommended packages should/will enable GPU support.
+
+Package: ollama
+Version: 0.20.5~rc2
+Architecture: amd64
+Maintainer: lingfish <lingfish@users.noreply.github.com>
+Installed-Size: 56211
+Depends: libc6 (>= 2.28), libgcc-s1 (>= 3.4), libstdc++6 (>= 10.2), sysuser-helper (<< 2.0)
+Recommends: libollama-nvidia | libollama-amd
+Homepage: https://github.com/ollama/ollama
+Priority: optional
+Section: golang
+Filename: pool/main/o/ollama/ollama_0.20.5~rc2_amd64.deb
+Size: 25973542
+SHA512: c7743bc492d0febc4179b0dbb76fd8fbdd182fa32ab5426ffbbde49d15b131c760398e27babf6244aed05d7d4a01df96b646ba13061407726971847b39e666e5
+SHA256: 4903ab142f2afe4140df9d6b91c99f964d2c4756cac0aa917cd2db851f8a6581
+SHA1: 791171ae819d4e75fd9073b40e0bca148290a428
+MD5sum: 828857a450f5a97cf4a7eb31e3a87ca4
+Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
+ Ollama
+ .
+ Discord (https://discord.gg/ollama)
+ .
+ Get up and running with large language models.
+ .
+ One of the recommended packages should/will enable GPU support.
+

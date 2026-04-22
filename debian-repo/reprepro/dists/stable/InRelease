@@ -1,0 +1,54 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: lingfish
+Suite: stable
+Codename: stable
+Date: Wed, 22 Apr 2026 07:23:28 UTC
+Architectures: amd64 arm64
+Components: main
+Description: APT repository for ollama packages
+MD5Sum:
+ aeab101007d28655a65444754eec1d2f 16117 main/binary-amd64/Packages
+ c293d25936295a569a33696bda09a58c 4371 main/binary-amd64/Packages.gz
+ fc764d90f265fbaf156e7d427ab9612b 117 main/binary-amd64/Release
+ e962a1512bf54487a8148edc14e3dd68 10977 main/binary-arm64/Packages
+ 3fbcecc5253a665af9becb3c531ea66b 3019 main/binary-arm64/Packages.gz
+ ff2b132dd7b7e4e53d9b72e3753426e2 117 main/binary-arm64/Release
+SHA1:
+ db4849e4122f71988532790c58e9814d3dcd5982 16117 main/binary-amd64/Packages
+ 1032d006e75081602719a36b9a5d65c47e0eba1c 4371 main/binary-amd64/Packages.gz
+ 80750fd2a050ef0f8b60dcc6bf9bbb7325f4a23e 117 main/binary-amd64/Release
+ 5691841c0d9e4c0d9b96f1b3b26e06d77094b4be 10977 main/binary-arm64/Packages
+ 4658febe8e44ddadb843e9bc11c9a6fd35ce86e6 3019 main/binary-arm64/Packages.gz
+ 9df7d1cd8ff4332e1ab6b7c11e7ee42ddb5dc711 117 main/binary-arm64/Release
+SHA256:
+ 02a6bf295336b62e8d2078d4338564c829dc98361f5a0947a2218ba5d15d286e 16117 main/binary-amd64/Packages
+ 9039b40d3bafbebf2254934bb142ce1dc509424b81872b2a50e59363d287bff4 4371 main/binary-amd64/Packages.gz
+ 0ab1fa39ea63fba350a4b3a344866380c9a3ce025efe5ea8a794cbed42beee27 117 main/binary-amd64/Release
+ 96b034fd4eddf80ea16998d3d2f63b6b8fc4c73d182072d0250f87e8fb4d4fee 10977 main/binary-arm64/Packages
+ 77013f69c0f16f925bbea7257741f221826348ad6afa23eddcab998309492c84 3019 main/binary-arm64/Packages.gz
+ aaeda1c4f09856c60d50fe9770c552eb13df2fe41e3ba26c6c6aa8feae9bea46 117 main/binary-arm64/Release
+SHA512:
+ 3334389a549c8cf3dea82619c1cb58af657a261411a4f31bbc0cf5664461b6a3b45abd4a06f4b414561a57840aa038168a026fe5671a1b33ede632b117e82d0e 16117 main/binary-amd64/Packages
+ d3f02844737080dcdc432c968d2a81c3eb946158f10f7a6d7ee11ebe2e548582528e8793247f51ffda586f55d9134b1eb27445741fe816f41aea96519cd85d4a 4371 main/binary-amd64/Packages.gz
+ c73f608e351c7ffed7660eabbb35f8327281740f4dcb359455779f14abaac46cbc28cfedcc9f8182b61e19bf8adaa02beee0adbc1f3f93fc820388285f85a1ae 117 main/binary-amd64/Release
+ 938a801e223723ae16197340631dcf758826b37b530ba01eb1b258ba622aaa8e7ece0ac80b82955f9dbaf3f317dcdbb810773e45b2fa38e6c1a6bf788ef23c37 10977 main/binary-arm64/Packages
+ 2b7b024f0bc1e4c78b05fab762bb3a1e182306d0386a6f9840dc2ef5462c5523a3eab173eab70b849124afb3f91a26abebe148e061959ae867c691a28d96706d 3019 main/binary-arm64/Packages.gz
+ c0c85df0b66a4c70cbd615e92da270dc0ec72168ad75086bcd03d08cfe6d91b4702f249961691c06553224e7444a888e579724e65d90ded2e54dbdab427028a2 117 main/binary-arm64/Release
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEHJ6AInWZGlcPS9vrkal4IUrpJ1cFAmnod3AACgkQkal4IUrp
+J1eUDxAAguioghv5mYdkS0MlMOJQMf1NIzAFIU3wvpVuuMThC72Wm47lrYHZMOTC
+aaGZ+72UBRjkezntMN4OzYbL6o/M382pZfjC536s7t2ZsECDXtpbbILEr3bVclpd
+xBKBzYNkbxoLN8OEpjRWzuZewW9eVvRjmLQirc7yy0ojJcLcG7at0wBVv3gnl0XB
+6EKiJXf7JL70giPjxveTNNw//k1JEEk8/bOF8GaQK+ug8uR+QpClFcwOVDwncu/H
+uP9L8vhu4v5PWGDua7b8oWKWnfYap4UwiDBm5n3TT0D2Dv1k7GxFRPGuD+E2uFDx
+NilW0j0IpEcW8pz3xUOIfzP19qya1+f3L8JI2Yb8nC4sIKdhlmBCYMISe3mU/bon
+qZ8B3KkAOP8g/Y94+xDjGeVL44FuUGUFHrwZbTil20Du2BVIX3kIQmKa9PftIa3e
+qj5gT3cW1kiXPo9TwSGcCvmaH6oUlC2bm+E1XO+eqTQkZL+x+3Melz/VougxMuKQ
+tMbJFLEJjHwU1HkuHb7CCLUSBCoq+3vID/bFrUd780OuS6nn3DiGyidWjuQrT8uT
+YHXjExsU9dDwnkc/LUtVxnFlPTW7wpmgjZ8nOIWUZBkDTE0nPdysp/CwzFlgrUDl
+jRER8GXJvM7AuIeu+QV0jZkteleztNR58TixylAfXf1KJP5e+x0=
+=OKbC
+-----END PGP SIGNATURE-----
