@@ -226,7 +226,7 @@ jobs:
       - name: Install reprepro
         run: |
           sudo apt-get update
-          sudo apt-get install -y reprepro tree
+          sudo apt-get install -y reprepro tree rclone
           reprepro --version
 
       - name: Create dirs if needed
@@ -277,15 +277,17 @@ jobs:
           git push
 
       - name: Push to R2
-        uses: ryand56/r2-upload-action@latest
-        with:
-          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
-          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: debian-repo
-          destination-dir: /
-          keep-file-fresh: true
+#        uses: ryand56/r2-upload-action@latest
+#        with:
+#          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+#          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+#          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+#          r2-bucket: ${{ secrets.R2_BUCKET }}
+#          source-dir: debian-repo
+#          destination-dir: /
+#          keep-file-fresh: true
+        run: |
+          rclone sync debian-repo/ ":s3:${{ secrets.R2_BUCKET }}/" --s3-provider Cloudflare --s3-access-key-id ${{ secrets.R2_ACCESS_KEY_ID }} --s3-secret-access-key ${{ secrets.R2_SECRET_ACCESS_KEY }} --s3-endpoint https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com --progress
 
   email:
     if: ${{ failure() }}
