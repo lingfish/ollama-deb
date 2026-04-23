@@ -5,6 +5,8 @@ description: Unofficial Debian package repository documentation
 
 > [!NOTE]
 > The `sources.list` codename has changed from Debian distro names (like `bookworm`) to `stable`. Ollama themselves don't specify what releases/distros they support, so I've changed to using an agnostic one too. `bookworm` will remain for a while, and then be removed.
+>
+> The component has also changed from `main` to `non-free` to reflect the proprietary GPU libraries included in the packages.
 
 ## Overview
 
@@ -30,7 +32,7 @@ Click to expand which format you need:
 <summary>Pre deb822 file format</summary>
 
 ```bash
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/ollama.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable non-free" | sudo tee /etc/apt/sources.list.d/ollama.list
 ```
 
 </details>
@@ -43,7 +45,7 @@ cat <<EOF > /etc/apt/sources.list.d/ollama.sources
 Types: deb
 URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
 Suites: stable
-Components: main
+Components: non-free
 Architectures: $(dpkg --print-architecture)
 Signed-By: /etc/apt/keyrings/ollama-repo.gpg
 EOF
@@ -79,29 +81,48 @@ To use a GPU, you'll also need one of the following packages, depending on your 
 - `libollama-nvidia` (installed by default)
 - `libollama-amd`
 
-## Other notes
+## Release candidates
 
-### APT pinning
+To receive release candidate (RC) versions, use the `rc` suite instead of `stable`:
 
-If you don't want release candidates and only "stable" versions, add the following to, say, `/etc/apt/preferences.d/ollama`:
+<details>
+<summary>Pre deb822 file format</summary>
 
-```
-Package: /./
-Pin: origin ollama-repo.jason-9eb.workers.dev
-Pin: version /rc/
-Pin-Priority: -1
+```bash
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt rc non-free" | sudo tee /etc/apt/sources.list.d/ollama-rc.list
 ```
 
-And then just do the usual `apt update`.
+</details>
 
-### The Cloudflare worker
+<details>
+<summary>New deb822 file format</summary>
 
-Due to the way APT repos work, and how hosting companies cost money, I came up with a novel way to "host" the repo.
+```bash
+cat <<EOF > /etc/apt/sources.list.d/ollama-rc.sources
+Types: deb
+URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
+Suites: rc
+Components: non-free
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/ollama-repo.gpg
+EOF
+```
 
-The repo is hosted on a Cloudflare R2 bucket — but only the repo skeleton files, not the (massive) deb files.
+</details>
 
-> [!TIP]
-> When APT requests a package file, the Cloudflare worker redirects the request to a GitHub Releases download URL. This keeps hosting costs minimal while still serving the actual package files from GitHub's infrastructure.
+## The Cloudflare worker
+
+[//]: # (Due to the way APT repos work, and how hosting companies cost money, I came up with a novel way to "host" the repo.)
+
+[//]: # ()
+
+[//]: # (The repo is hosted on a Cloudflare R2 bucket — but only the repo skeleton files, not the &#40;massive&#41; deb files.)
+
+[//]: # (> [!TIP])
+
+[//]: # (> When APT requests a package file, the Cloudflare worker redirects the request to a GitHub Releases download URL. This keeps hosting costs minimal while still serving the actual package files from GitHub's infrastructure.)
+
+The worker basically acts like a normal webserver.
 
 This is the code for the Cloudflare worker:
 
@@ -113,12 +134,19 @@ export default {
 
     switch (request.method) {
       case "GET":
-        if (key.includes("apt/pool/main/o/ollama/")) {
-          const filename = key.split('/').pop()
-          const githubFormattedFilename = filename.replace('~', '-').replace('-rc', '.rc')
-          const newUrl = `https://github.com/lingfish/ollama-deb/releases/download/v${githubFormattedFilename.replace(/^[^_]*_/, '').replace('_amd64.deb', '').replace('.rc', '-rc')}/` + githubFormattedFilename
-          return Response.redirect(newUrl, 302);
-        }
+        // if (key.includes("apt/pool/main/o/ollama/")) {
+        //   // Extract the filename from the original URL
+        //   const filename = key.split('/').pop()
+           
+        //   // Replace '~' with '-' in the version number
+        //   const githubFormattedFilename = filename.replace('~', '-').replace('-rc', '.rc')
+           
+        //   // Construct the new URL
+        //   const newUrl = `https://github.com/lingfish/ollama-deb/releases/download/v${githubFormattedFilename.replace(/^[^_]*_/, '').replace('_amd64.deb', '').replace('.rc', '-rc')}/` + githubFormattedFilename
+        //   //return Response.redirect("https://github.com/lingfish/ollama-deb/releases/download/v0.11.5-rc2/ollama_0.11.5.rc2_amd64.deb", 302);
+        //   console.log(newUrl);
+        //   return Response.redirect(newUrl, 302);
+        // }        
         const object = await env.MY_BUCKET.get(key);
 
         if (object === null) {

@@ -2,7 +2,7 @@ Origin: lingfish
 Codename: bookworm
 Suite: stable
 Architectures: amd64 arm64
-Components: main
+Components: non-free
 Description: APT repository for ollama packages
 SignWith: 1C9E802275991A570F4BDBEB91A978214AE92757
 
@@ -10,6 +10,14 @@ Origin: lingfish
 Codename: stable
 Suite: stable
 Architectures: amd64 arm64
-Components: main
+Components: non-free
 Description: APT repository for ollama packages
+SignWith: 1C9E802275991A570F4BDBEB91A978214AE92757
+
+Origin: lingfish
+Codename: rc
+Suite: rc
+Architectures: amd64 arm64
+Components: non-free
+Description: APT repository for ollama release candidates
 SignWith: 1C9E802275991A570F4BDBEB91A978214AE92757
