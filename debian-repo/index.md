@@ -4,9 +4,12 @@ description: Unofficial Debian package repository documentation
 ---
 
 > [!NOTE]
-> The `sources.list` codename has changed from Debian distro names (like `bookworm`) to `stable`. Ollama themselves don't specify what releases/distros they support, so I've changed to using an agnostic one too. `bookworm` will remain for a while, and then be removed.
+> The `sources.list` codename has changed from Debian distro names (like `bookworm`) to `stable`. Ollama themselves
+> don't specify what releases/distros they support, so I've changed to using an agnostic one too. `bookworm` has been
+> removed.
 >
-> The component has also changed from `main` to `non-free` to reflect the proprietary GPU libraries included in the packages.
+> The component has also changed from `main` to `non-free` to reflect the proprietary GPU libraries included in the
+> packages.
 
 ## Overview
 

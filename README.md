@@ -1,13 +1,18 @@
 # ollama-deb
 
-> [!TIP]
-> ### Builds are restored!
-> As of 22 April, 2026, builds are working again.
-> #### Older news
-> As of 20 April, 2026, builds (and hence packages) were broken. This is due to the ollama team now pushing builds (specifically nvidia libraries) that are greater than 2GB in size,
-> which breaks GitHub release upload limits. I'm trying a few solutions, but finding nothing promising yet.
+> [!NOTE]
+> ### Breaking repo changes!
+> Whilst things were broken with the repo, I took the time to change some things:
+> - You will need to update your `sources.list` to change from `main` to `non-free`.
+> - `rc` builds are now in their own component too, so there's no need anymore for previous `apt` pinning instructions
+> (feel free, and I recommend, removing the pin file if you previously had one).
+> - I will only be hosting the latest versions of released and `rc` packages.
+> - Packages aren't uploaded to GitHub releases anymore, due to their size.
 >
-> If anyone can offer free hosting of the repo files, please get in touch via an [issue](https://github.com/lingfish/ollama-deb/issues).
+> Please see the [doco site](https://lingfish.github.io/ollama-deb/) for updated info.
+> 
+> The plan is to eventually get this repo into [extrepo](https://salsa.debian.org/extrepo-team/extrepo-data) for easier
+> installation.
 
 ![GitHub Release](https://img.shields.io/github/v/release/lingfish/ollama-deb)
 
