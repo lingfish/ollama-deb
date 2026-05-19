@@ -76,12 +76,14 @@ Install ollama directly from the repository:
 sudo apt install ollama
 ```
 
-> [!WARNING]
-> The first GPU package that this `ollama` package recommends is `libollama-nvidia`, and so if none are requested, this will be installed by default. If you don't need any GPU support, remove it afterwards, or add `--no-install-recommends` to your `apt` command.
+> [!NOTE]
+> The `ollama` package now depends on `libollama-common`, which provides CPU dispatch libraries and the Vulkan backend. CPU inference works out of the box — no GPU package required.
+> 
+> To add GPU acceleration, install one of the GPU backend packages listed below.
 
 To use a GPU, you'll also need one of the following packages, depending on your GPU make:
 
-- `libollama-nvidia` (installed by default)
+- `libollama-nvidia` (recommended by default)
 - `libollama-amd`
 
 ## Release candidates

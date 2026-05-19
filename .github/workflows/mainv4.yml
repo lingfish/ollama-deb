@@ -112,6 +112,14 @@ jobs:
           mkdir -p ollama-${VERSION_NO_V}/tmp/rocm
           tar --zstd -xvf ollama-linux-amd64-rocm.tar.zst -C ollama-${VERSION_NO_V}/tmp/rocm
 
+      - name: Separate CUDA libs into NVIDIA package directory
+        run: |
+          mkdir -p ollama-${VERSION_NO_V}/tmp/nvidia/lib/ollama
+          mv ollama-${VERSION_NO_V}/tmp/lib/ollama/cuda_v12 ollama-${VERSION_NO_V}/tmp/nvidia/lib/ollama/ 2>/dev/null || true
+          mv ollama-${VERSION_NO_V}/tmp/lib/ollama/cuda_v13 ollama-${VERSION_NO_V}/tmp/nvidia/lib/ollama/ 2>/dev/null || true
+          echo "=== tmp structure after CUDA separation ==="
+          tree ollama-${VERSION_NO_V}/tmp/
+
       - name: Run dh_make to create packaging files
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
