@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Create `libollama-common` package containing CPU dispatch libraries and Vulkan backend
+- `ollama` now Depends on `libollama-common` — CPU inference works out of the box
+- GPU packages depend on `libollama-common` and provide `ollama-gpu-backend`
+- No conflicts between GPU backends; users can install both NVIDIA and AMD simultaneously
+
+### Fixed
+- Fix CPU inference bug for AMD GPU users (CPU dispatch libs now in `libollama-common` instead of `libollama-nvidia`)
+
 ## [0.18.2] - YYYY-MM-DD
 ### Added
 - Add sysvinit init script for non-systemd distributions (Devuan, Alpine)

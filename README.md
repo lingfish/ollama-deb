@@ -79,4 +79,9 @@ Created symlink /etc/systemd/system/default.target.wants/ollama.service → /lib
 Processing triggers for libc-bin (2.36-9+deb12u7) ...
 ```
 
-The shared libraries that the ollama team put into their binary tarballs are now split into their own package.
+The shared libraries that the ollama team put into their binary tarballs are now split into three packages:
+- `libollama-common` (CPU dispatch + Vulkan) — required by `ollama`
+- `libollama-nvidia` (CUDA backend) — optional
+- `libollama-amd` (ROCm backend) — optional
+
+CPU inference works out of the box. GPU packages are additive.
