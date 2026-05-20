@@ -200,6 +200,7 @@ jobs:
 
 
   update-repo:
+    if: ${{ inputs.skip_release != 'true' }}
     needs: [build]
     runs-on: ubuntu-latest
     steps:
