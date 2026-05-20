@@ -33,6 +33,8 @@ Architecture: arm64
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+Replaces: libollama-nvidia (<< 0.24.0~)
+Breaks: libollama-nvidia (<< 0.24.0~)
 Multi-Arch: same
 Maintainer: lingfish <lingfish@users.noreply.github.com>
 Description: Shared libraries for ollama (CPU dispatch + Vulkan)
