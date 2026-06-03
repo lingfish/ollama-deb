@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    purge)
+        rm -f /etc/ld.so.conf.d/ollama.conf
+        ldconfig
+        ;;
+esac

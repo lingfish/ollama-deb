@@ -1,1 +1,2 @@
 tmp/lib/ollama usr/lib
+debian/ollama.conf etc/ld.so.conf.d/
