@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+        if getent group render >/dev/null 2>&1; then
+            usermod -a -G render ollama
+        fi
+        if getent group video >/dev/null 2>&1; then
+            usermod -a -G video ollama
+        fi
+        ;;
+esac
