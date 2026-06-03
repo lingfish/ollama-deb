@@ -52,16 +52,17 @@ jobs:
           # Strip leading 'v' for numeric version.
           VERSION_NO_V="${VERSION_REF#v}"
 
-          # Append +repackN suffix for manual rebuilds of the same upstream version.
+          # Build Debian package version (may differ from upstream version).
+          # Convert -rc to ~rc for Debian compatibility, and append +repackN
+          # suffix for manual rebuilds of the same upstream version.
+          VERSION_NO_V_DEB="${VERSION_NO_V}"
+          VERSION_NO_V_DEB="${VERSION_NO_V_DEB/-rc/~rc}"
           if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             REPACK="${{ github.event.inputs.repack }}"
             if [ -n "$REPACK" ] && [ "$REPACK" != "0" ]; then
-              VERSION_NO_V="${VERSION_NO_V}+repack${REPACK}"
+              VERSION_NO_V_DEB="${VERSION_NO_V_DEB}+repack${REPACK}"
             fi
           fi
-
-          # Convert -rc to ~rc for Debian version compatibility.
-          VERSION_NO_V_DEB="${VERSION_NO_V/-rc/~rc}"
 
           # Make variables available to other steps in this job
           echo "VERSION_REF=$VERSION_REF" >> $GITHUB_ENV

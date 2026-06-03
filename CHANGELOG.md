@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Fix CPU inference bug for AMD GPU users (CPU dispatch libs now in `libollama-common` instead of `libollama-nvidia`)
 - Remove `Multi-Arch: same` from `libollama-common` — pydeb-s3 drops Multi-Arch from Packages metadata, causing APT to see repo and installed versions as different packages and trigger a same-version reinstall on every `apt dist-upgrade`
 - Add `repack` workflow input and `+repackN` suffix for rebuilds of the same upstream version
+- Fix `+repackN` suffix: only apply to Debian package version metadata, not to build directory names or archive paths (was causing tar to look for wrong filename)
 
 ## [0.18.2] - YYYY-MM-DD
 ### Added
