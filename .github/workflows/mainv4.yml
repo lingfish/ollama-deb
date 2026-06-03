@@ -11,6 +11,10 @@ on:
         description: 'Optional: version tag or ref to build (e.g. v1.2.3 or 1.2.3). If provided, this will be used instead of the push tag.'
         required: false
         default: ''
+      repack:
+        description: 'Repack number for rebuilds (1, 2, ...). Appends +repackN to deb version. Use with skip_release=true.'
+        required: false
+        default: '0'
       skip_release:
         description: 'Skip release and repo update steps (for testing builds)'
         required: false
@@ -45,8 +49,18 @@ jobs:
             VERSION_REF="${GITHUB_REF_NAME}"
           fi
 
-          # Strip leading 'v' for numeric version and convert -rc to ~rc for deb packages.
+          # Strip leading 'v' for numeric version.
           VERSION_NO_V="${VERSION_REF#v}"
+
+          # Append +repackN suffix for manual rebuilds of the same upstream version.
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            REPACK="${{ github.event.inputs.repack }}"
+            if [ -n "$REPACK" ] && [ "$REPACK" != "0" ]; then
+              VERSION_NO_V="${VERSION_NO_V}+repack${REPACK}"
+            fi
+          fi
+
+          # Convert -rc to ~rc for Debian version compatibility.
           VERSION_NO_V_DEB="${VERSION_NO_V/-rc/~rc}"
 
           # Make variables available to other steps in this job
