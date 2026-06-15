@@ -1,0 +1,23 @@
+name: Feature Request
+description: Suggest an enhancement to the packaging
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to see changed or added?
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Why would this be useful?
+    validations:
+      required: true
+  - type: input
+    id: upstream
+    attributes:
+      label: Upstream reference (if applicable)
+      placeholder: link to upstream issue / PR / docs
+    validations:
+      required: true

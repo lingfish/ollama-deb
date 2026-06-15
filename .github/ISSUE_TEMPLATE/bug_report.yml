@@ -1,0 +1,60 @@
+name: Bug Report
+description: Report a packaging/installation bug
+labels: [bug]
+body:
+  - type: input
+    id: distro
+    attributes:
+      label: Distribution & version
+      placeholder: e.g. Debian 12, Ubuntu 24.04
+    validations:
+      required: true
+  - type: input
+    id: arch
+    attributes:
+      label: Architecture
+      placeholder: e.g. amd64, arm64
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: e.g. 0.30.7
+    validations:
+      required: true
+  - type: textarea
+    id: package-info
+    attributes:
+      label: Package state
+      description: Run these commands and paste the output
+      render: shell
+      value: |
+        dpkg -l '*ollama*'
+        apt-cache policy ollama
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: dpkg output, systemd journal, etc.
+      render: shell
