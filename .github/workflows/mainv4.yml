@@ -25,9 +25,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: amd64
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: arm64
     runs-on: ${{ matrix.os }}
     # Expose variables computed in the 'set_version' step as job outputs so other jobs can access them via needs.build.outputs.*

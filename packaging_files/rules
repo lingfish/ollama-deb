@@ -17,11 +17,10 @@ export XZ_OPT=-v
 
 
 %:
-	dh $@ --with sysuser
+	dh $@ --with installsysusers
 
 override_dh_installinit:
 	dh_installinit --no-start
-
 
 # dh_make generated override targets.
 # This is an example for Cmake (see <https://bugs.debian.org/641051>).

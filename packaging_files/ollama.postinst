@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+#DEBHELPER#
+
 case "$1" in
     configure)
         if getent group render >/dev/null 2>&1; then
