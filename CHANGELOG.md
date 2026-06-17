@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [v0.30.8+repack1]
 
 ### Added
 - Split shared libraries into new `libollama-common` package containing CPU dispatch libraries and Vulkan backend
