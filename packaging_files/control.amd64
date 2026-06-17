@@ -15,7 +15,7 @@ Architecture: amd64
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- libollama-common,
+ libollama-common (= ${binary:Version}),
 Recommends: libollama-nvidia | libollama-amd
 Maintainer: lingfish <lingfish@users.noreply.github.com>
 Description: Get up and running with Llama 3.2, Mistral, Gemma 2, and other large language models. (program)
@@ -46,7 +46,7 @@ Architecture: amd64
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- libollama-common,
+ libollama-common (= ${binary:Version}),
 Provides: ollama-gpu-backend
 Maintainer: lingfish <lingfish@users.noreply.github.com>
 Description: Shared libraries for ollama (NVIDIA CUDA)
@@ -58,7 +58,7 @@ Architecture: amd64
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- libollama-common,
+ libollama-common (= ${binary:Version}),
 Provides: ollama-gpu-backend
 Maintainer: lingfish <lingfish@users.noreply.github.com>
 Description: Shared libraries for ollama (AMD ROCm)

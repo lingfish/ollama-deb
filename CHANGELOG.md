@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Remove `Multi-Arch: same` from `libollama-common` — pydeb-s3 drops `Multi-Arch` from Packages metadata, causing APT to see repo and installed versions as different packages and trigger a same-version reinstall on every `apt dist-upgrade`
 - Fix `+repackN` suffix: now only applied to Debian package version metadata, not to build directory names or archive paths
+- Add versioned dependency `libollama-common (= ${binary:Version})` to `ollama`, `libollama-nvidia`, and `libollama-amd` so APT upgrades `libollama-common` when upgrading the parent package
 
 ## [v0.22.1 – v0.23.0]
 
