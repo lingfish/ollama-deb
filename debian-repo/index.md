@@ -23,21 +23,66 @@ description: Unofficial Debian package repository documentation
 
 ## Overview
 
-Setting up this repository involves three simple steps:
+Setting up this repository involves three steps:
 
 1. Add the GPG key
 2. Add the repository source
 3. Install ollama
 
+This can be done manually, or you can use [extrepo](https://manpages.debian.org/trixie/extrepo/extrepo.1p.en.html) (1p).
+
 ## Repository setup
 
-### Add GPG key
+### Using extrepo
+
+Make sure you have extrepo installed, and then enable `non-free` in `/etc/extrepo/config.yaml`:
+
+```yaml
+enabled_policies:
+- main
+# - contrib
+- non-free
+```
+
+This is a quick `sed` if you want:
+
+```console
+root@host:/# sed -ie 's/^# - non-free$/- non-free/g' /etc/extrepo/config.yaml
+```
+
+Once done, you can use `search`, or just proceed with `enable`:
+
+```console
+root@host:/# extrepo search ollama
+Found ollama:
+---
+contact: https://github.com/lingfish/ollama-deb/issues
+description: |
+  Ollama - Large Language Model server. Get up and running with
+  Llama 3.2, Mistral, Gemma 2, and other large language models.
+gpg-key-checksum:
+  sha256: 5f7dfe78c12d73beab6afccaca230e73b542067cb6d64f593b9d64e3ebe531d4
+gpg-key-file: ollama.asc
+policy: non-free
+source:
+  Architectures: amd64 arm64
+  Components: non-free
+  Suites: stable
+  Types: deb
+  URIs: https://packages.lingfish.net/apt
+```
+
+Once you've done `enable`, don't forget to `apt update`.  Then proceed to [package installation](#package-installation).
+
+### Manual repo setup
+
+#### Add GPG key
 
 ```bash
 curl https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc | sudo gpg -o /etc/apt/keyrings/ollama-repo.gpg --dearmor
 ```
 
-### Add repository
+#### Add repository
 
 Click to expand which format you need:
 
@@ -68,7 +113,7 @@ EOF
 
 Of course, you could just paste the above into your favourite editor and save as root.
 
-### Update package lists
+#### Update package lists
 
 ```bash
 sudo apt update
