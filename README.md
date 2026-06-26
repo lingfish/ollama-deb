@@ -15,7 +15,7 @@
 > ### Breaking repo changes!
 > Whilst things were broken with the repo, I took the time to change some things:
 > - You will need to update your `sources.list` to change from `main` to `non-free`.
-> - `rc` builds are now in their own component too, so there's no need anymore for previous `apt` pinning instructions
+> - `rc` builds are now in their own suite too, so there's no need anymore for previous `apt` pinning instructions
 > (feel free, and I recommend, removing the pin file if you previously had one).
 > - I will only be hosting the latest versions of released and `rc` packages.
 > - As of 20 April, 2026, builds (and hence packages) were broken. This is due to the ollama team now pushing builds (specifically nvidia libraries) that are greater than 2GB in size,
