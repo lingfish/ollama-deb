@@ -1,5 +1,12 @@
 # ollama-deb
 
+# Repo URL migration
+
+> [!NOTE]
+> The repo URL has moved from `ollama-repo.jason-9eb.workers.dev` to `packages.lingfish.net`.
+> The old URL will continue to work, but new installations should use the new URL.
+> See the [doco site](https://lingfish.github.io/ollama-deb/) for details.
+
 > [!NOTE]
 > ### Breaking repo changes!
 > Whilst things were broken with the repo, I took the time to change some things:
