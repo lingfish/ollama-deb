@@ -4,6 +4,16 @@ description: Unofficial Debian package repository documentation
 ---
 
 > [!NOTE]
+> The repo URL has moved from `ollama-repo.jason-9eb.workers.dev` to `packages.lingfish.net`.
+> The old URL continues to work, but new installations should use the new URL.
+> To update existing sources, run:
+> ```bash
+> sudo sed -i 's|ollama-repo.jason-9eb.workers.dev|packages.lingfish.net|g' /etc/apt/sources.list.d/ollama*.list /etc/apt/sources.list.d/ollama*.sources
+> ```
+>
+> Then run `sudo apt update` to refresh your package lists.
+
+> [!NOTE]
 > The `sources.list` codename has changed from Debian distro names (like `bookworm`) to `stable`. Ollama themselves
 > don't specify what releases/distros they support, so I've changed to using an agnostic one too. `bookworm` has been
 > removed.
@@ -35,7 +45,7 @@ Click to expand which format you need:
 <summary>Pre deb822 file format</summary>
 
 ```bash
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt stable non-free" | sudo tee /etc/apt/sources.list.d/ollama.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://packages.lingfish.net/apt stable non-free" | sudo tee /etc/apt/sources.list.d/ollama.list
 ```
 
 </details>
@@ -46,7 +56,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-
 ```bash
 cat <<EOF > /etc/apt/sources.list.d/ollama.sources
 Types: deb
-URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
+URIs: https://packages.lingfish.net/apt/
 Suites: stable
 Components: non-free
 Architectures: $(dpkg --print-architecture)
@@ -65,7 +75,7 @@ sudo apt update
 ```
 
 > [!NOTE]
-> The repo URL looks a bit unusual. See [here](https://github.com/lingfish/ollama-deb/issues/5) for details.
+> The repo URL used to be a Cloudflare worker (`ollama-repo.jason-9eb.workers.dev`). It now points to `packages.lingfish.net`. The old URL will continue to work. See [here](https://github.com/lingfish/ollama-deb/issues/5) for details.
 > This URL points to a Cloudflare worker. I do this in my free time, and I'm not willing to pay for hosting the (abnormally-large) package files.
 
 ## Package installation
@@ -94,7 +104,7 @@ To receive release candidate (RC) versions, use the `rc` suite instead of `stabl
 <summary>Pre deb822 file format</summary>
 
 ```bash
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://ollama-repo.jason-9eb.workers.dev/apt rc non-free" | sudo tee /etc/apt/sources.list.d/ollama-rc.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-repo.gpg] https://packages.lingfish.net/apt rc non-free" | sudo tee /etc/apt/sources.list.d/ollama-rc.list
 ```
 
 </details>
@@ -105,7 +115,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ollama-
 ```bash
 cat <<EOF > /etc/apt/sources.list.d/ollama-rc.sources
 Types: deb
-URIs: https://ollama-repo.jason-9eb.workers.dev/apt/
+URIs: https://packages.lingfish.net/apt/
 Suites: rc
 Components: non-free
 Architectures: $(dpkg --print-architecture)
