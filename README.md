@@ -55,3 +55,5 @@ The shared libraries that the ollama team put into their binary tarballs are now
 - `libollama-amd` (ROCm backend) — optional
 
 CPU inference works out of the box. GPU packages are additive.
+
+For Vulkan GPU acceleration on Linux, a Vulkan ICD driver must be installed separately. See [Vulkan Support](https://lingfish.github.io/ollama-deb/#vulkan-support) in the documentation.

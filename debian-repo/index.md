@@ -141,6 +141,15 @@ To use a GPU, you'll also need one of the following packages, depending on your 
 - `libollama-nvidia` (recommended by default)
 - `libollama-amd`
 
+## Vulkan Support
+
+On Linux, GPU acceleration via Vulkan requires a Vulkan ICD to be installed on your system. Depending on your hardware, you may need one of:
+- `mesa-vulkan-drivers` (AMD/Intel GPUs)
+- `nvidia-vulkan-icd` (NVIDIA GPUs)
+- `amdvlk` (AMD GPUs — alternative to Mesa)
+
+Install the appropriate driver package for your hardware. Ollama will automatically fall back to CPU mode if no Vulkan ICD is detected (and no `ollama-deb` GPU packages are installed).
+
 ## Release candidates
 
 To receive release candidate (RC) versions, use the `rc` suite instead of `stable`:
