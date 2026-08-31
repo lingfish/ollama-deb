@@ -260,8 +260,18 @@ jobs:
           codenames=stable
           [[ "$VERSION_NO_V" == *-rc* ]] && codenames=rc
 
+          # Upload all packages to non-free (proprietary + libre)
           pipx run pydeb-s3 --debug upload -b ${{ secrets.R2_BUCKET }} -o lingfish --suite stable --codename $codenames --component non-free --access-key-id ${{ secrets.R2_ACCESS_KEY_ID }} --secret-access-key ${{ secrets.R2_SECRET_ACCESS_KEY }} --endpoint https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com --visibility nil --prefix apt --sign 1C9E802275991A570F4BDBEB91A978214AE92757 $current/../*deb
           pipx run pydeb-s3 --debug clean -b ${{ secrets.R2_BUCKET }} --access-key-id ${{ secrets.R2_ACCESS_KEY_ID }} --secret-access-key ${{ secrets.R2_SECRET_ACCESS_KEY }} --endpoint https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com --prefix apt --codename stable --component non-free
+
+          # Upload only libre packages (ollama, libollama-common) to main component for Trisquel/free systems
+          shopt -s nullglob
+          libre_debs=( $current/../ollama_*.deb $current/../libollama-common_*.deb )
+          shopt -u nullglob
+          if [ ${#libre_debs[@]} -gt 0 ]; then
+            pipx run pydeb-s3 --debug upload -b ${{ secrets.R2_BUCKET }} -o lingfish --suite stable --codename $codenames --component main --access-key-id ${{ secrets.R2_ACCESS_KEY_ID }} --secret-access-key ${{ secrets.R2_SECRET_ACCESS_KEY }} --endpoint https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com --visibility nil --prefix apt --sign 1C9E802275991A570F4BDBEB91A978214AE92757 "${libre_debs[@]}"
+            pipx run pydeb-s3 --debug clean -b ${{ secrets.R2_BUCKET }} --access-key-id ${{ secrets.R2_ACCESS_KEY_ID }} --secret-access-key ${{ secrets.R2_SECRET_ACCESS_KEY }} --endpoint https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com --prefix apt --codename stable --component main
+          fi
 
   email:
     if: ${{ failure() }}

@@ -14,7 +14,7 @@
 > [!NOTE]
 > ### Breaking repo changes!
 > Whilst things were broken with the repo, I took the time to change some things:
-> - You will need to update your `sources.list` to change from `main` to `non-free`.
+> - You will need to update your `sources.list` to change from `main` to `non-free`. **Note:** Users on Trisquel/free systems may prefer using the `main` component instead.
 > - `rc` builds are now in their own suite too, so there's no need anymore for previous `apt` pinning instructions
 > (feel free, and I recommend, removing the pin file if you previously had one).
 > - I will only be hosting the latest versions of released and `rc` packages.
