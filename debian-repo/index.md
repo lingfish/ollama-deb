@@ -17,9 +17,11 @@ description: Unofficial Debian package repository documentation
 > The `sources.list` codename has changed from Debian distro names (like `bookworm`) to `stable`. Ollama themselves
 > don't specify what releases/distros they support, so I've changed to using an agnostic one too. `bookworm` has been
 > removed.
->
+
+> [!NOTE]
 > The component has also changed from `main` to `non-free` to reflect the proprietary GPU libraries included in the
-> packages.
+> packages. However, a `main` component is also available containing only libre binaries (without proprietary GPU
+> backends) for users on free systems like Trisquel.
 
 ## Overview
 
@@ -35,19 +37,24 @@ This can be done manually, or you can use [extrepo](https://manpages.debian.org/
 
 ### Using extrepo
 
-Make sure you have extrepo installed, and then enable `non-free` in `/etc/extrepo/config.yaml`:
+> [!NOTE]
+> For Trisquel or other free-software-only systems, use `main` component instead of `non-free`.
+
+Make sure you have extrepo installed, and then enable the appropriate component in `/etc/extrepo/config.yaml`:
 
 ```yaml
 enabled_policies:
 - main
 # - contrib
-- non-free
+# - non-free
+- main
 ```
 
 This is a quick `sed` if you want:
 
 ```console
 root@host:/# sed -ie 's/^# - non-free$/- non-free/g' /etc/extrepo/config.yaml
+sed -ie 's/^# - main$/main/g' /etc/extrepo/config.yaml
 ```
 
 Once done, you can use `search`, or just proceed with `enable`:
