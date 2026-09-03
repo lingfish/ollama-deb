@@ -1,0 +1,65 @@
+ollama for Debian
+=================
+
+This package provides ollama, repackaged for Debian-based distributions.
+It is built from the upstream ollama project at https://github.com/ollama/ollama.
+
+Package split
+-------------
+
+The ollama package is split into multiple packages:
+
+  ollama                  Main program and CLI
+  libollama-common        CPU dispatch libraries and Vulkan backend (required)
+  libollama-nvidia        NVIDIA CUDA shared libraries
+  libollama-amd           AMD ROCm shared libraries
+
+Install the appropriate GPU backend package for your hardware. On systems
+with no discrete GPU, libollama-common alone is sufficient for CPU inference.
+
+GPU backend selection
+---------------------
+
+  NVIDIA GPUs:  apt install ollama libollama-nvidia
+  AMD GPUs:     apt install ollama libollama-amd
+
+Only one GPU backend package should be installed at a time.
+
+Configuration
+-------------
+
+The ollama systemd service is installed but not started by default.
+To enable and start ollama:
+
+  systemctl enable --now ollama
+
+The service listens on localhost:11434 by default. See the upstream
+documentation at https://ollama.com for configuration options.
+
+APT repository
+--------------
+
+This package is distributed via a self-hosted APT repository.
+To add the repository and install:
+
+  curl -fsSL https://lingfish.github.io/ollama-deb/ | bash
+  apt install ollama
+
+The repository provides stable and release candidate (rc) suites.
+
+Reporting issues
+----------------
+
+Report packaging issues (not upstream ollama bugs) at:
+  https://github.com/lingfish/ollama-deb/issues
+
+For upstream ollama issues, use:
+  https://github.com/ollama/ollama/issues
+
+Upgrade notes
+-------------
+
+apt-listchanges can show changelog and NEWS entries when upgrading.
+Install it for a better upgrade experience:
+
+  apt install apt-listchanges

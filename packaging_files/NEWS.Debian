@@ -1,0 +1,37 @@
+ollama (0.30.8+repack1) stable; urgency=medium
+
+  The ollama APT repository now provides a main component containing
+  only libre packages (ollama and libollama-common) for use on
+  free-software-only systems such as Trisquel.
+
+  Users on Trisquel or other free systems should use the main component
+  instead of non-free:
+
+    deb https://lingfish.github.io/ollama-deb/apt stable main
+
+  Users on standard Debian/Ubuntu systems should continue using non-free
+  to get GPU backend packages:
+
+    deb https://lingfish.github.io/ollama-deb/apt stable non-free
+
+  The ollama package has been split into multiple packages to better
+  support different GPU configurations:
+
+    ollama                  - Main program (required)
+    libollama-common        - CPU dispatch and Vulkan libraries (required)
+    libollama-nvidia        - NVIDIA CUDA backend (install for NVIDIA GPUs)
+    libollama-amd           - AMD ROCm backend (install for AMD GPUs)
+
+  APT will suggest the appropriate GPU backend package during install.
+  To install with NVIDIA support:
+
+    apt install ollama libollama-nvidia
+
+  To install with AMD support:
+
+    apt install ollama libollama-amd
+
+  The ollama user is now automatically added to the render and video
+  groups for GPU access.
+
+ -- lingfish <lingfish@users.noreply.github.com>  Mon, 01 Sep 2026 06:07:29 +0000

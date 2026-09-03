@@ -1,0 +1,137 @@
+ollama (0.30.8+repack1) stable; urgency=medium
+
+  * Split shared libraries into new libollama-common package containing CPU
+    dispatch libraries and Vulkan backend
+  * Add Replaces/Breaks to libollama-common for clean upgrades from older
+    package layouts
+  * Register /usr/lib/ollama/ on the standard library search path
+  * Add postinst script to join the ollama user to render and video groups
+  * Add +repackN suffix for rebuilds of the same upstream version
+  * Add issue templates for bug reports and feature requests
+  * Migrate from dh-sysuser to dh_installsysusers for user creation
+  * Remove Multi-Arch: same from libollama-common to fix same-version
+    reinstall on every apt dist-upgrade
+  * Fix +repackN suffix to only apply to Debian package version metadata
+  * Add versioned dependency libollama-common (= ${binary:Version}) to
+    ollama, libollama-nvidia, and libollama-amd
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 03 Jun 2026 17:00:48 +1000
+
+ollama (0.23.0) stable; urgency=medium
+
+  * Replace pydeb-s3 installation with pipx run instead of a shell wrapper
+  * Add clean phase to CI workflow using pydeb-s3
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 29 Apr 2026 15:46:27 +1000
+
+ollama (0.22.1~rc0) unstable; urgency=medium
+
+  * Migrate to pydeb-s3 for repository management
+  * Support multiple codenames in APT repository
+
+ -- lingfish <lingfish@users.noreply.github.com>  Sun, 26 Apr 2026 17:42:29 +1000
+
+ollama (0.21.3~rc0) unstable; urgency=medium
+
+  * Add rc suite and switch to non-free component
+  * Enable release workflow; remove reprepro Limit directive
+  * Use rclone sync instead of r2-upload-action for release uploads
+  * Use xz level 2 for faster compression
+
+ -- lingfish <lingfish@users.noreply.github.com>  Fri, 24 Apr 2026 16:19:16 +1000
+
+ollama (0.21.1) stable; urgency=medium
+
+  * Disable compression for all packages to speed up build
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 22 Apr 2026 15:21:44 +1000
+
+ollama (0.21.1~rc1) unstable; urgency=medium
+
+  * Split large deb packages to work around GitHub 2 GB release limit
+  * Migrate back to S3 buckets for artifact storage
+
+ -- lingfish <lingfish@users.noreply.github.com>  Tue, 21 Apr 2026 18:19:22 +1000
+
+ollama (0.20.3) stable; urgency=medium
+
+  * Add arm64 architecture support to APT distributions
+  * Fix reprepro command to not ignore exit codes
+
+ -- lingfish <lingfish@users.noreply.github.com>  Tue, 07 Apr 2026 12:55:14 +1000
+
+ollama (0.20.4~rc2) unstable; urgency=medium
+
+  * Update documentation to dynamically configure correct architecture
+    in APT sources
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 08 Apr 2026 11:00:01 +1000
+
+ollama (0.18.3~rc1) unstable; urgency=medium
+
+  * Add sysvinit init script for non-systemd distributions
+  * Add debhelper systemd/sysvinit dual support
+  * Add skip_release workflow input for testing builds
+  * Start tracking packaging changes in CHANGELOG.md
+  * Remove --with systemd flag from debhelper (incompatible with
+    compat level 11+)
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 25 Mar 2026 17:43:44 +1100
+
+ollama (0.18.2~rc0) unstable; urgency=medium
+
+  * Add arm64 architecture support
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 18 Mar 2026 15:55:44 +1100
+
+ollama (0.14.3~rc0) unstable; urgency=medium
+
+  * Fix build for new zst archive format
+
+ -- lingfish <lingfish@users.noreply.github.com>  Fri, 16 Jan 2026 19:01:35 +1100
+
+ollama (0.12.8) stable; urgency=medium
+
+  * Add disk space cleanup step to CI workflow
+
+ -- lingfish <lingfish@users.noreply.github.com>  Fri, 31 Oct 2025 18:04:49 +1100
+
+ollama (0.11.2) stable; urgency=medium
+
+  * Add APT repository support with reprepro
+  * Add git-lfs for repository data
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 06 Aug 2025 10:06:42 +1000
+
+ollama (0.9.1) stable; urgency=medium
+
+  * Split NVIDIA and AMD shared libraries into separate libollama-nvidia
+    and libollama-amd packages
+  * Include ollama upstream release notes in GitHub release body
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 11 Jun 2025 09:15:38 +1000
+
+ollama (0.5.8~rc11) unstable; urgency=medium
+
+  * Generate deb file listing and upload to releases
+  * Improve CONTENTS.md generation
+
+ -- lingfish <lingfish@users.noreply.github.com>  Sat, 08 Feb 2025 16:05:06 +1100
+
+ollama (0.5.5) stable; urgency=medium
+
+  * Simplify debian/install file; use dh_install recursion
+
+ -- lingfish <lingfish@users.noreply.github.com>  Thu, 16 Jan 2025 11:58:25 +0000
+
+ollama (0.4.5) stable; urgency=medium
+
+  * Update packaging rules for ollama's bundled libraries
+
+ -- lingfish <lingfish@users.noreply.github.com>  Tue, 12 Nov 2024 17:02:05 +1100
+
+ollama (0.3.13) stable; urgency=medium
+
+  * Initial packaging via GitHub Actions workflow
+
+ -- lingfish <lingfish@users.noreply.github.com>  Tue, 29 Oct 2024 12:17:02 +1100

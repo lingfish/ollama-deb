@@ -34,5 +34,8 @@ override_dh_strip:
 override_dh_shlibdeps:
 	dh_shlibdeps -Xlib/ollama
 
+override_dh_installchangelogs:
+	dh_installchangelogs --no-trim
+
 override_dh_builddeb:
 	dh_builddeb -- -Z xz -z 2
