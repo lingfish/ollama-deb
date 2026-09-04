@@ -9,7 +9,7 @@ changelog, NEWS, and README files.
 |------|----------|-------------|---------------|
 | `changelog` | `packaging_files/changelog` | `changelog.Debian.gz` | CI (auto-commits after each build) |
 | `generate_changelog.sh` | `packaging_files/generate_changelog.sh` | — | CI (generates current entry at build time) |
-| `NEWS.Debian` | `packaging_files/NEWS.Debian` | `NEWS.Debian.gz` | Agent (significant changes only) |
+| `NEWS` | `packaging_files/NEWS` | `NEWS.Debian.gz` | Agent (significant changes only) |
 | `README.Debian` | `packaging_files/README.Debian` | `README.Debian` | Agent (when structure changes) |
 | `NEWS.gz` | Generated at build time | `NEWS.gz` | CI (from upstream GitHub release notes) |
 
@@ -104,7 +104,7 @@ The CI converts git tags to Debian versions:
 
 ## When to update NEWS.Debian
 
-Update `packaging_files/NEWS.Debian` **only** for significant user-facing
+Update `packaging_files/NEWS` **only** for significant user-facing
 changes that warrant explicit notification. Examples:
 - Package split or merge
 - Config file location changes
@@ -135,7 +135,7 @@ Update `packaging_files/README.Debian` when:
 4. `dh_installchangelogs --no-trim` installs:
    - `debian/changelog` → `changelog.Debian.gz` (full history, not trimmed)
    - `debian/NEWS` → `NEWS.Debian.gz`
-5. Upstream release notes are fetched from GitHub and installed as `NEWS.gz`
+5. Upstream release notes are fetched from GitHub and installed as `NEWS.gz` via `dh_install`
 6. `debian/README.Debian` is installed as-is by debhelper
 7. After build, `update-repo` commits `packaging_files/changelog` back to repo
 
@@ -145,7 +145,7 @@ Validate the changelog format before committing:
 
 ```bash
 dpkg-parsechangelog --file packaging_files/changelog
-dpkg-parsechangelog --file packaging_files/NEWS.Debian
+dpkg-parsechangelog --file packaging_files/NEWS
 ```
 
 Both should parse without errors.

@@ -158,10 +158,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p ollama-${VERSION_NO_V}/usr/share/doc/ollama
           gh release view ${VERSION_REF} --repo https://github.com/ollama/ollama --json body --jq .body \
-            > ollama-${VERSION_NO_V}/usr/share/doc/ollama/NEWS
-          gzip -9 ollama-${VERSION_NO_V}/usr/share/doc/ollama/NEWS
+            | gzip -9 > ollama-${VERSION_NO_V}/debian/NEWS.upstream.gz
 
       - name: Build the package
         env:

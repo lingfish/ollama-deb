@@ -1,1 +1,2 @@
 tmp/bin/ollama usr/bin
+debian/NEWS.upstream.gz usr/share/doc/ollama/NEWS.gz
