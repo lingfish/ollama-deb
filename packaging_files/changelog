@@ -1,3 +1,9 @@
+ollama (0.33.3+repack5) stable; urgency=medium
+
+  * Repack for packaging updates
+
+ -- lingfish <lingfish@users.noreply.github.com>  Fri, 04 Sep 2026 07:42:03 +0000
+
 ollama (0.33.3+repack4) stable; urgency=medium
 
   * Repack for packaging updates
