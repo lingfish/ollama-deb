@@ -1,16 +1,10 @@
 #!/bin/bash
 # Generate debian/changelog with correct version for this build.
 #
-# Run from inside the source directory (e.g. ollama-0.33.3/).
-# Expects packaging_files/changelog at ../packaging_files/changelog.
+# Can be run from any directory — uses the script's own location to find
+# packaging_files/changelog.
 #
-# This script:
-#   1. Reads the current history from packaging_files/changelog
-#   2. Prepends a new entry for the current version
-#   3. Writes the updated history back to packaging_files/changelog
-#   4. Copies the result to debian/changelog for the build
-#
-# Usage: ../packaging_files/generate_changelog.sh <version>
+# Usage: packaging_files/generate_changelog.sh <version>
 #   version: Debian package version (e.g. 0.33.3 or 0.33.3~rc1)
 
 set -euo pipefail
@@ -33,7 +27,8 @@ else
   ENTRY_BODY="New upstream release"
 fi
 
-HISTORY_FILE="../packaging_files/changelog"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+HISTORY_FILE="$SCRIPT_DIR/changelog"
 BUILD_CHANGELOG="debian/changelog"
 
 # Count history entries
