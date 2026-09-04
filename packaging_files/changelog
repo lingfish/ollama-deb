@@ -1,3 +1,9 @@
+ollama (0.33.3+repack4) stable; urgency=medium
+
+  * Repack for packaging updates
+
+ -- lingfish <lingfish@users.noreply.github.com>  Fri, 04 Sep 2026 05:51:22 +0000
+
 ollama (0.30.8+repack1) stable; urgency=medium
 
   * Split shared libraries into new libollama-common package containing CPU
