@@ -292,11 +292,9 @@ jobs:
 
       - name: Commit changelog history back to repo
         run: |
-          # Generate the changelog for this version
+          # Generate changelog — this prepends the new entry to packaging_files/changelog
           mkdir -p debian
           ./packaging_files/generate_changelog.sh "${VERSION_NO_V_DEB}"
-          # Update the history file with the generated changelog
-          cp debian/changelog packaging_files/changelog
           # Commit and push if there are changes
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

@@ -4,6 +4,12 @@
 # Run from inside the source directory (e.g. ollama-0.33.3/).
 # Expects packaging_files/changelog at ../packaging_files/changelog.
 #
+# This script:
+#   1. Reads the current history from packaging_files/changelog
+#   2. Prepends a new entry for the current version
+#   3. Writes the updated history back to packaging_files/changelog
+#   4. Copies the result to debian/changelog for the build
+#
 # Usage: ../packaging_files/generate_changelog.sh <version>
 #   version: Debian package version (e.g. 0.33.3 or 0.33.3~rc1)
 
@@ -28,7 +34,7 @@ else
 fi
 
 HISTORY_FILE="../packaging_files/changelog"
-OUTPUT_FILE="debian/changelog"
+BUILD_CHANGELOG="debian/changelog"
 
 # Count history entries
 HISTORY_COUNT=0
@@ -42,21 +48,32 @@ echo "Distribution: ${DISTRIBUTION}"
 echo "Entry type:   ${ENTRY_BODY}"
 echo "Date:         ${DATE}"
 echo "History file: ${HISTORY_FILE} (${HISTORY_COUNT} entries)"
-echo "Output:       ${OUTPUT_FILE}"
 echo "============================"
 
 # Build the new entry
+NEW_ENTRY=$(cat <<EOF
+ollama (${VERSION}) ${DISTRIBUTION}; urgency=medium
+
+  * ${ENTRY_BODY}
+
+ -- ${MAINTAINER}  ${DATE}
+EOF
+)
+
+# Prepend new entry to history file (history is append-only, never overwritten)
+# Use a temp file to avoid "input file is output file" error
+TEMP_FILE=$(mktemp)
 {
-  echo "ollama (${VERSION}) ${DISTRIBUTION}; urgency=medium"
+  echo "${NEW_ENTRY}"
   echo ""
-  echo "  * ${ENTRY_BODY}"
-  echo ""
-  echo " -- ${MAINTAINER}  ${DATE}"
-  echo ""
-  # Append past entries from the history file
   if [ -f "$HISTORY_FILE" ]; then
     cat "$HISTORY_FILE"
   fi
-} > "${OUTPUT_FILE}"
+} > "${TEMP_FILE}"
+mv "${TEMP_FILE}" "${HISTORY_FILE}"
 
-echo "Generated ${OUTPUT_FILE} with $((HISTORY_COUNT + 1)) total entries"
+# Copy updated history to build directory
+cp "${HISTORY_FILE}" "${BUILD_CHANGELOG}"
+
+echo "Prepended entry for ${VERSION} to ${HISTORY_FILE} ($((HISTORY_COUNT + 1)) total entries)"
+echo "Generated ${BUILD_CHANGELOG}"
