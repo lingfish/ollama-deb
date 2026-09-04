@@ -7,10 +7,41 @@ changelog, NEWS, and README files.
 
 | File | Location | Installed as | Maintained by |
 |------|----------|-------------|---------------|
-| `changelog` | `packaging_files/changelog` | `changelog.Debian.gz` | Agent (before each release) |
+| `changelog` | `packaging_files/changelog` | `changelog.Debian.gz` | Agent (adds past entries for history) |
+| `generate_changelog.sh` | `packaging_files/generate_changelog.sh` | — | CI (generates current entry at build time) |
 | `NEWS.Debian` | `packaging_files/NEWS.Debian` | `NEWS.Debian.gz` | Agent (significant changes only) |
 | `README.Debian` | `packaging_files/README.Debian` | `README.Debian` | Agent (when structure changes) |
 | `NEWS.gz` | Generated at build time | `NEWS.gz` | CI (from upstream GitHub release notes) |
+
+## How the changelog works
+
+The `debian/changelog` file is **generated at build time** by
+`packaging_files/generate_changelog.sh`. It reads past entries from
+`packaging_files/changelog` and prepends a new entry with the correct
+version and date.
+
+**The static `packaging_files/changelog` is NOT installed directly.**
+It is the history source that the script reads from.
+
+### Why this approach
+
+Upstream ollama releases happen automatically via tag pushes — no agent
+is involved. `dpkg-buildpackage` reads the version from `debian/changelog`,
+so it must be generated with the correct version at build time.
+
+## Agent workflow for changelog
+
+After a release is built, add an entry to `packaging_files/changelog`
+for the **previous** version's changes. This ensures the entry is in
+the history for the next build.
+
+1. A build runs for tag `v0.34.0` — `generate_changelog.sh` creates
+   an entry for `0.34.0` with today's date
+2. After the build, the agent adds an entry for `0.33.3` (or whatever
+   the previous version was) to `packaging_files/changelog`
+3. The next build (e.g. `v0.35.0`) picks up the `0.33.3` entry in history
+
+**Don't add the current version's entry** — the CI generates it.
 
 ## Changelog format
 
@@ -49,18 +80,19 @@ ollama (0.31.0) stable; urgency=medium
  -- lingfish <lingfish@users.noreply.github.com>  Mon, 01 Jan 2026 12:00:00 +0000
 ```
 
-## When to update the changelog
+### Getting the date
 
-Update `packaging_files/changelog` **before** each release. Add a new entry
-at the top of the file with:
+Use the git tag date for the version being documented:
 
-1. The correct version (matching `VERSION_NO_V_DEB` from the CI workflow)
-2. The appropriate distribution (`stable` or `unstable`)
-3. Bullet points describing the packaging changes in this version
-4. Current date in RFC 2822 format
+```bash
+git log -1 --format="%ai" "refs/tags/v0.33.3"
+```
 
-The CI workflow overwrites `debian/changelog` via `cp -v ../packaging_files/* debian/`,
-so no CI changes are needed.
+Then convert to RFC 2822:
+
+```bash
+git log -1 --format="%ai" "refs/tags/v0.33.3" | xargs -I{} date -d "{}" -R
+```
 
 ### Version conversion from git tag
 
@@ -94,12 +126,16 @@ Update `packaging_files/README.Debian` when:
 ## How CI uses these files
 
 1. `dh_make` generates a boilerplate `debian/changelog`
-2. `cp -v ../packaging_files/* debian/` overwrites it with the committed version
-3. `dh_installchangelogs --no-trim` installs:
+2. Packaging files are copied to `debian/`, **excluding** `changelog` and
+   `generate_changelog.sh`
+3. `generate_changelog.sh` creates `debian/changelog` with:
+   - A new entry for the current version (correct version + today's date)
+   - All past entries from `packaging_files/changelog`
+4. `dh_installchangelogs --no-trim` installs:
    - `debian/changelog` → `changelog.Debian.gz` (full history, not trimmed)
    - `debian/NEWS` → `NEWS.Debian.gz`
-4. Upstream release notes are fetched from GitHub and installed as `NEWS.gz`
-5. `debian/README.Debian` is installed as-is by debhelper
+5. Upstream release notes are fetched from GitHub and installed as `NEWS.gz`
+6. `debian/README.Debian` is installed as-is by debhelper
 
 ## Validation
 
