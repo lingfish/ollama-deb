@@ -7,7 +7,7 @@ changelog, NEWS, and README files.
 
 | File | Location | Installed as | Maintained by |
 |------|----------|-------------|---------------|
-| `changelog` | `packaging_files/changelog` | `changelog.Debian.gz` | Agent (adds past entries for history) |
+| `changelog` | `packaging_files/changelog` | `changelog.Debian.gz` | CI (auto-commits after each build) |
 | `generate_changelog.sh` | `packaging_files/generate_changelog.sh` | — | CI (generates current entry at build time) |
 | `NEWS.Debian` | `packaging_files/NEWS.Debian` | `NEWS.Debian.gz` | Agent (significant changes only) |
 | `README.Debian` | `packaging_files/README.Debian` | `README.Debian` | Agent (when structure changes) |
@@ -20,6 +20,10 @@ The `debian/changelog` file is **generated at build time** by
 `packaging_files/changelog` and prepends a new entry with the correct
 version and date.
 
+After a successful build, the `update-repo` job commits the generated
+changelog back to `packaging_files/changelog`, so the history accumulates
+automatically across builds.
+
 **The static `packaging_files/changelog` is NOT installed directly.**
 It is the history source that the script reads from.
 
@@ -31,17 +35,14 @@ so it must be generated with the correct version at build time.
 
 ## Agent workflow for changelog
 
-After a release is built, add an entry to `packaging_files/changelog`
-for the **previous** version's changes. This ensures the entry is in
-the history for the next build.
+**No manual workflow required.** The CI handles everything:
+1. Build generates `debian/changelog` with correct version
+2. `update-repo` job commits it back to `packaging_files/changelog`
+3. Next build picks up the accumulated history
 
-1. A build runs for tag `v0.34.0` — `generate_changelog.sh` creates
-   an entry for `0.34.0` with today's date
-2. After the build, the agent adds an entry for `0.33.3` (or whatever
-   the previous version was) to `packaging_files/changelog`
-3. The next build (e.g. `v0.35.0`) picks up the `0.33.3` entry in history
-
-**Don't add the current version's entry** — the CI generates it.
+If you need to manually add a historical entry (e.g., for a version
+that was built before this automation existed), add it to the top of
+`packaging_files/changelog` following the format below.
 
 ## Changelog format
 
@@ -136,6 +137,7 @@ Update `packaging_files/README.Debian` when:
    - `debian/NEWS` → `NEWS.Debian.gz`
 5. Upstream release notes are fetched from GitHub and installed as `NEWS.gz`
 6. `debian/README.Debian` is installed as-is by debhelper
+7. After build, `update-repo` commits `packaging_files/changelog` back to repo
 
 ## Validation
 

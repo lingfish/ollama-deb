@@ -290,6 +290,20 @@ jobs:
             pipx run pydeb-s3 --debug clean -b ${{ secrets.R2_BUCKET }} --access-key-id ${{ secrets.R2_ACCESS_KEY_ID }} --secret-access-key ${{ secrets.R2_SECRET_ACCESS_KEY }} --endpoint https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com --prefix apt --codename stable --component main
           fi
 
+      - name: Commit changelog history back to repo
+        run: |
+          # Generate the changelog for this version
+          mkdir -p debian
+          ./packaging_files/generate_changelog.sh "${VERSION_NO_V_DEB}"
+          # Update the history file with the generated changelog
+          cp debian/changelog packaging_files/changelog
+          # Commit and push if there are changes
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packaging_files/changelog
+          git diff --cached --quiet || git commit -m "Update changelog history for ${VERSION_REF}"
+          git push
+
   email:
     if: ${{ failure() }}
     runs-on: ubuntu-latest

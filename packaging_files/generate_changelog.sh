@@ -20,13 +20,36 @@ else
   DISTRIBUTION="stable"
 fi
 
+# Determine entry type based on repack suffix
+if echo "$VERSION" | grep -q '+repack'; then
+  ENTRY_BODY="Repack for packaging updates"
+else
+  ENTRY_BODY="New upstream release"
+fi
+
 HISTORY_FILE="../packaging_files/changelog"
+OUTPUT_FILE="debian/changelog"
+
+# Count history entries
+HISTORY_COUNT=0
+if [ -f "$HISTORY_FILE" ]; then
+  HISTORY_COUNT=$(grep -c '^ollama (' "$HISTORY_FILE" || true)
+fi
+
+echo "=== generate_changelog.sh ==="
+echo "Version:      ${VERSION}"
+echo "Distribution: ${DISTRIBUTION}"
+echo "Entry type:   ${ENTRY_BODY}"
+echo "Date:         ${DATE}"
+echo "History file: ${HISTORY_FILE} (${HISTORY_COUNT} entries)"
+echo "Output:       ${OUTPUT_FILE}"
+echo "============================"
 
 # Build the new entry
 {
   echo "ollama (${VERSION}) ${DISTRIBUTION}; urgency=medium"
   echo ""
-  echo "  * New upstream release"
+  echo "  * ${ENTRY_BODY}"
   echo ""
   echo " -- ${MAINTAINER}  ${DATE}"
   echo ""
@@ -34,4 +57,6 @@ HISTORY_FILE="../packaging_files/changelog"
   if [ -f "$HISTORY_FILE" ]; then
     cat "$HISTORY_FILE"
   fi
-} > "debian/changelog"
+} > "${OUTPUT_FILE}"
+
+echo "Generated ${OUTPUT_FILE} with $((HISTORY_COUNT + 1)) total entries"
