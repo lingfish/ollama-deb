@@ -1,3 +1,9 @@
+ollama (0.34.0~rc4) unstable; urgency=medium
+
+  * New upstream release
+
+ -- lingfish <lingfish@users.noreply.github.com>  Wed, 09 Sep 2026 19:10:04 +0000
+
 ollama (0.33.3+repack6) stable; urgency=medium
 
   * Repack for packaging updates
