@@ -46,7 +46,7 @@ jobs:
       - name: Fix extrepo GPG key for apt/sqv
         if: matrix.install-method == 'extrepo'
         run: |
-          sudo gpg --dearmor < /var/lib/extrepo/keys/ollama.asc > /var/lib/extrepo/keys/ollama.gpg
+          sudo gpg --dearmor < /var/lib/extrepo/keys/ollama.asc | sudo tee /var/lib/extrepo/keys/ollama.gpg > /dev/null
           sudo sed -i 's|ollama.asc|ollama.gpg|' /etc/apt/sources.list.d/extrepo_ollama.sources
 
       - name: Update package lists
