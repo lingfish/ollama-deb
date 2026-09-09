@@ -43,6 +43,12 @@ jobs:
         if: matrix.install-method == 'extrepo'
         run: sudo extrepo enable ollama
 
+      - name: Fix extrepo GPG key for apt/sqv
+        if: matrix.install-method == 'extrepo'
+        run: |
+          sudo gpg --dearmor < /var/lib/extrepo/keys/ollama.asc > /var/lib/extrepo/keys/ollama.gpg
+          sudo sed -i 's|ollama.asc|ollama.gpg|' /etc/apt/sources.list.d/extrepo_ollama.sources
+
       - name: Update package lists
         run: sudo apt-get update
 
@@ -105,6 +111,7 @@ jobs:
           journalctl -u ollama --no-pager -n 50 || true
           echo "=== APT sources ==="
           cat /etc/apt/sources.list.d/ollama* || true
+          cat /etc/apt/sources.list.d/extrepo_ollama* || true
           echo "=== Keyrings ==="
           ls -la /etc/apt/keyrings/ || true
           echo "=== Extrepo config ==="
