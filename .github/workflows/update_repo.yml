@@ -48,7 +48,7 @@ jobs:
           echo "VERSION_NO_V_DEB=${{ inputs.VERSION_NO_V_DEB }}" >> $GITHUB_ENV
           
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: main
       
