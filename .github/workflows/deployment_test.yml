@@ -36,7 +36,7 @@ jobs:
         if: matrix.install-method == 'extrepo'
         run: |
           sudo apt-get update
-          sudo apt-get install -y extrepo
+          sudo apt-get install -y --no-install-recommends extrepo
           sudo sed -i 's/^# - non-free$/- non-free/' /etc/extrepo/config.yaml
 
       - name: Enable ollama via extrepo
@@ -47,7 +47,7 @@ jobs:
         run: sudo apt-get update
 
       - name: Install ollama
-        run: sudo apt-get install -y ollama
+        run: sudo apt-get install -y --no-install-recommends ollama
 
       - name: Verify package installed
         run: |
@@ -60,6 +60,7 @@ jobs:
       - name: Verify user
         run: |
           getent group ollama
+          getent passwd ollama
           id ollama
 
       - name: Verify files
@@ -95,6 +96,9 @@ jobs:
         run: |
           echo "=== Package status ==="
           dpkg -l ollama libollama-common || true
+          echo "=== User info ==="
+          getent group ollama || true
+          getent passwd ollama || true
           echo "=== Service status ==="
           systemctl status ollama || true
           echo "=== Service logs ==="
@@ -105,3 +109,5 @@ jobs:
           ls -la /etc/apt/keyrings/ || true
           echo "=== Extrepo config ==="
           cat /etc/extrepo/config.yaml || true
+          echo "=== /var/lib/ollama ==="
+          ls -laR /var/lib/ollama || true
