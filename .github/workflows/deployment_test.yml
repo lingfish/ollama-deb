@@ -1,0 +1,107 @@
+name: Deployment test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        install-method: [manual, extrepo]
+    name: "Install via ${{ matrix.install-method }}"
+
+    steps:
+      - name: Add GPG key
+        if: matrix.install-method == 'manual'
+        run: |
+          sudo mkdir -p /etc/apt/keyrings
+          curl -fsSL https://raw.githubusercontent.com/lingfish/ollama-deb/refs/heads/main/repository-key.asc \
+            | sudo gpg --dearmor -o /etc/apt/keyrings/ollama-repo.gpg
+
+      - name: Add APT source
+        if: matrix.install-method == 'manual'
+        run: |
+          cat <<EOF | sudo tee /etc/apt/sources.list.d/ollama.sources
+          Types: deb
+          URIs: https://packages.lingfish.net/apt/
+          Suites: stable
+          Components: non-free
+          Architectures: $(dpkg --print-architecture)
+          Signed-By: /etc/apt/keyrings/ollama-repo.gpg
+          EOF
+
+      - name: Enable extrepo non-free
+        if: matrix.install-method == 'extrepo'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y extrepo
+          sudo sed -i 's/^# - non-free$/- non-free/' /etc/extrepo/config.yaml
+
+      - name: Enable ollama via extrepo
+        if: matrix.install-method == 'extrepo'
+        run: sudo extrepo enable ollama
+
+      - name: Update package lists
+        run: sudo apt-get update
+
+      - name: Install ollama
+        run: sudo apt-get install -y ollama
+
+      - name: Verify package installed
+        run: |
+          dpkg -l ollama
+          dpkg -l ollama | grep -q '^ii' || { echo "Package not in ii state"; exit 1; }
+
+      - name: Verify binary
+        run: ollama --version
+
+      - name: Verify user
+        run: |
+          getent group ollama
+          id ollama
+
+      - name: Verify files
+        run: |
+          test -f /usr/bin/ollama
+          test -d /usr/lib/ollama
+
+      - name: Start service
+        run: sudo systemctl enable --now ollama
+
+      - name: Wait for ollama to respond
+        run: |
+          echo "Waiting for ollama on port 11434..."
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:11434 > /dev/null 2>&1; then
+              echo "Ollama responded after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Timed out waiting for ollama"
+          exit 1
+
+      - name: Verify API
+        run: |
+          curl -sf http://localhost:11434/api/tags | python3 -m json.tool
+
+      - name: Verify CLI
+        run: ollama list
+
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          echo "=== Package status ==="
+          dpkg -l ollama libollama-common || true
+          echo "=== Service status ==="
+          systemctl status ollama || true
+          echo "=== Service logs ==="
+          journalctl -u ollama --no-pager -n 50 || true
+          echo "=== APT sources ==="
+          cat /etc/apt/sources.list.d/ollama* || true
+          echo "=== Keyrings ==="
+          ls -la /etc/apt/keyrings/ || true
+          echo "=== Extrepo config ==="
+          cat /etc/extrepo/config.yaml || true
