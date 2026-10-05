@@ -1,3 +1,9 @@
+ollama (0.40.0~rc3) unstable; urgency=medium
+
+  * New upstream release
+
+ -- lingfish <lingfish@users.noreply.github.com>  Mon, 05 Oct 2026 03:17:39 +0000
+
 ollama (0.40.0~rc2) unstable; urgency=medium
 
   * New upstream release
